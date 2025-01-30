@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Regular Properties</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Introduction to Regular Properties</h2>
+
+<p><strong>Prove:</strong> That regular languages are closed under union - that is, that the set union operation preserves the property of regularity; taking the union \( L_{3} = L_{1} \cup L_{2} \) if \( L_{1} \) and \( L_{2} \) are regular, \( L_{3} \) must be regular.</p>
+
+<!-- COLLAPSIBLE INFORMATION BOX -->
+<details>
+    <summary><strong>Information to Know</strong></summary>
+    <ul>
+        <li><strong>Regular languages:</strong> A language is called a <em>regular language</em> if and only if there exists a finite automaton (DFA) that recognizes it.</li>
+        <ul>
+            <li>If a language is <strong>regular</strong>, then there exists a DFA that recognizes it.</li>
+            <li>If a DFA <strong>exists</strong> for a language, then the language must be <strong>regular.</strong></li>
+            <li>L is regular \(\iff \exists \) DFA \(M\) such that \(L(M) = L\) </li>
+        </ul>
+        <li><strong>Finite Automaton:</strong> A model of computation used to recognize regular languages. It is represented as a 5-tuple.</li>
+        <li><strong>DFA Definition:</strong>
+            \[
+            (Q, \Sigma, \delta, q_0, F)
+            \]
+            where:
+            <ul>
+                <li>\( Q \) is a finite set of states.</li>
+                <li>\( \Sigma \) is a finite input alphabet.</li>
+                <li>\( \delta: Q \times \Sigma \to Q \) is the transition function, mapping a state and an input symbol to a new state. (Defines rules for moving)</li>
+                <li>\( q_0 \in Q \) is the initial state.</li>
+                <li>\( F \subseteq Q \) is the set of accepting (final) states.</li>
+            </ul>
+        </li>
+        <strong> Operations CAN ONLY be applied to each component in the 5-tuple as opposed to the machine as a whole</strong>
+        <li><strong>Closure Properties:</strong> Regular languages are closed under operations like union, concatenation, and Kleene star.</li>
+        <li><strong>Formal DFA Recognition:</strong> A DFA recognizes a language \(L \subseteq \sum^*\) if and only if: 
+            \[
+            L = \{ w \in \Sigma^* \mid \delta^*(q_0, w) \in F \}
+            \]
+            <ul>
+                <li>\( w \in \Sigma^* \): \( w \) is a string made up of symbols from the alphabet \( \Sigma \), including the empty string.</li>
+                <li>\( \delta^* (q_{0},w) \) represents the extended transition function, which processes the entire string \( w \) from the initial state \( q_{0} \).</li>
+                <li>If \( \delta^* (q_{0},w) \in F \), the DFA ends in a final (accepting) state.</li>
+                <ul>
+                    <li>\(\mid \delta^*(q_{0},w) \ni F\): condition that must be met for \(w\) to be included in \(L\)</li>
+                </ul> 
+                <li><strong>English Interpretation:</strong> The set of all strings \(w\) from \(\sum^*\) such that, when processed by the DFA starting from \(q_{0}\), the final state reached is in \(F\)</li>
+            </ul>
+    </ul>
+</details>
+<details>
+    <summary><strong>Rephrasing the Question</strong></summary>
+    <ul>
+        <li><strong>Question in English (context doesn't demand it):</strong> Given regular languages \(L_{1}\) and \(L_{2}\) over alphabet
+        \(\sum\), we want to show that \(L_{3} = L_{1} \cup L_{2}\) is regular. By definition \(L_{3}\) is regular
+        iff there is a DFA \(M_{3}\) that recognizes \(L_{3}\)</li>
+        <li><strong>Question in symbol notation (context demands it):</strong> \(L_{3}\) is regular iff \(\exists\) DFA \(M_{3} \ni L(M_{3}) = L_{3}\)</li>
+        <ul>
+            <li>\(L_{3}\) is a regular language if and only if there exists a DFA \(M_{3}\) where the langauge recognized by \(M_{3}\) is exactly \(L_{3}\)</li>
+            <li> \(L(M_{3}) = L_{3}\): A language is recognized by DFA \(M_{3}\) when \(M_{3}\) <strong>accepts all strings that
+                belong to the language \(L_{3}\) and rejects all the strings that do not.
+            </strong></li>
+        </ul>
+    </ul>
+</details>
+
+<details>
+    <summary>How to Approach the Proof</summary>
+    <strong>(1) For the proof to work, we must be able to move from the premises to the conclusion. </strong>
+    <ul>
+        <li><strong> Our Premesis (facts we start with in a proof):</strong></li>
+        <ul>
+            <li><strong>A language is regular if and only if there exists a DFA that recognizes it</strong></li>
+            <ul>
+                <li>L is regular \(\iff \exists \) DFA \(M\) such that \(L(M) = L\)</li>
+            </ul>
+            <li>\(L_{1}\) and \(L_{2}\) are <strong>regular languages</strong></li>
+            <ul>
+                <li> \(\exists \) DFA \(M_{1}\) such that \(L(M_{1}) = L_{1}\)</li>
+                <li> \(\exists \) DFA \(M_{2}\) such that \(L(M_{2}) = L_{2}\) </li>
+            </ul>
+            <li> <strong>Regular languages are closed under union</strong>, meaning if \(L_{1}\) and \(L_{2}\) are regular,
+                 then \(L_{1} \cup L_{2}\) should also be regular.
+            </li>
+        </ul>
+        <li><strong>Our Conclusion (What we need to prove):</strong></li>
+        <ul>
+            <li> \(L_{3} = L_{1} \cup L_{2}\) is a regular language</li>
+            <ul>
+                <li> This means that <strong>there exists a DFA \(M_{3}\) that recognizes \(L_{3}\)</strong></li>
+            </ul>
+            
+        </ul>
+    </ul>
+    <strong>(2) The Approach (Construction)</strong>
+        <ul>
+            <li> <strong> We build \(M_{3}\)</strong>: if we can show \(M_{3}\) exists, then \(L_{3}\) exists and is regular by <strong>definition of regular languages</strong> </li>
+            
+    </ul>
+</details>
+<p><strong>Step 1: Establish the Premesis (Refer To: How to Approach the Proof)</strong></p>
+<ul> 
+    <li>By regularity, we have DFAs \(M_{1}\) and \(M_{2}\) recognizing \(L_{1}\) and \(L_{2}\)</li>
+    <li>By definition of DFA, let \(M_{1}\) = (\(Q_{1}, \sum_{1}, \delta_{1}, q_{01}, F_{1}\)) 
+        and (\(M_{2}\) = \(Q_{2}, \sum_{2}, \delta_{2}, q_{02}, F_{2}\)).
+    </li>
+    <ul>
+        <li> 
+            <span class="tooltip"><strong>To further simplify this</strong>
+                <span class="tooltiptext">If the machines have distinct alphabets, we can just let Σ be the union alphabet and extend both machines to go to a 'fail state' if they encounter a symbol they didn’t have to begin with. (More on fail states later).</span>
+            </span>,
+            we can say that \(M_{1}\) = (\(Q_{1}, \sum, \delta_{1}, q_{01}, F_{1}\)) 
+            and 
+            <br>(\(M_{2}\) = \(Q_{2}, \sum, \delta_{2}, q_{02}, F_{2}\)). 
+        </li>
+    </ul>
+    <li>In order to show that \( L_{3} = L_{1} \cup L_{2} \), we need to <i>construct</i> \(M_{3}\) in terms of \(M_{1}\) and \(M_{2}\)</li>
+</ul>
+<p><strong>Step 2: Construction</strong></p>
+<ul>
+    <li>By definition of DFA, we can redefine each component that comprises \(M_{3}\)'s 5-tuple as follows:</li>
+    <ul>
+        <li>
+            <span class="tooltip">\(Q_{3} = Q_{1} \times Q_{2}\)
+                <span class="tooltiptext">We dont do \(Q_{3} = Q_{1} \cup Q_{2}\) because it only stores the individual states from \(M_{1}\) and \(M_{2}\) but not their relationships. 
+                    This would lose information about how the two automata move together, making it impossible to simulate both automata at the same time.
+                </span>
+            </span>
+                <ul>
+                    <li>Each state in the new DFA \(M_{3}\) is a combination of one state from \(M_{1}\) and one state from \(M_{2}\) </li>
+                    <li>A state in \(M_{3}\) will be of the form (\(q_{1},q_{2}\)) - a pair of "virtual states", one from the left machine and one from the right machine.</li>
+                    <li>We are making a DFA that runs \(M_{1}\) and \(M_{2}\) as <strong>virtual machines within itself</strong></li>
+                    <li>Since the cross product contains all possible ordered pairs of elements from its left and right sets, \(Q_{3}\) contains <strong>all possible pairs of states </strong>\((q_{1},q_{2}\)) where \(q_{1} \in Q_{1}\) and \(q_{2} \in Q_{2}\)  </li>
+                </ul>
+        </li>
+        <li>\(\delta_{3}\)</li>
+            <ul>
+                <li>For any state \(q_{3 \in Q_{3}}\) and symbol \(a \in \sum\), compose the transitions into a pair and let:
+                    \[
+                    \delta_{3}((q_{1},q_{2}), a) = (\delta_{1}(q_{1}, a), \delta_{2}(q_{2}, a))
+                    \]
+                </li>
+                <li> In other words, write transition function in terms of the transition functions of the two machines</li>
+
+                </li>
+            </ul>
+        <li>\(q_{03}\)
+            <ul>
+                <li>Since we are running both machines at the same time, we need to start at the initial states of both machines.</li>
+                <li>Thus, \(q_{03} = (q_{01}, q_{02})\)</li>
+            </ul>
+        </li>
+        <li>\(F_{3}\)</li>
+            <ul>
+                <li>
+                    <span class="tooltip">\(F_{3} = \{(q_{1},q_{2}) \mid (q_{1} \in F) \vee (q_{2} \in F_{2})\} \)
+                        <span class="tooltiptext">We don't do \(F_{3} = F_{1} \times F_{2}\) because it would require that we have a state-pair with a state in both the left and right accept states at the same time. 
+                            We have to define it as all state-pairs that have a state in the left accept state or the right accept state.
+                            <br> Why: So that \(M_{3}\) accepts a string if either \(M_{1}\) or \(M_{2}\) would accept it. </br>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+    </ul>
+</ul>
+<p><strong>Step 3: Conclude the Proof</strong></p>
+<ul>
+    <li> Given definition of \(M_{3}\) in terms of \(M_{1}\) and \(M_{2}\), we have shown that \(M_{3}\) exists.</li>
+    <li> By inspection, \(M_{3}\) executes \(M_{1}\) and \(M_{2}\) at the same time and accepts anytime its
+        computation ends in a place where either \(M_{1}\) or \(M_{2}\) would accept it.
+    </li>
+    <li>By definition of union, \(M_{3}\) accepts \( L(M_{3}) \cup L(M_{2}) = L_{1} \cup L_{2} = L_{3}\)</li>
+    <li> We have a DFA \(M_{3}\) that accepts \(L_{3}\).</li>
+</ul>
+Therefore, in conclusion, \(L_{3}\) is regular.
+
+</body>
+</html>
