@@ -652,6 +652,147 @@
     </code></pre>
     </details>
 </details>
+<details>
+    <summary><strong>Worked out Leetcode Solutions</strong></summary>
+    <details>
+        <summary><strong>Contains Duplicate</strong></summary>
+        <pre><code>
+        #include &lt;bits/stdc++.h&gt; 
+        using namespace std; 
+        
+        class Solution {
+        public:
+            bool hasDuplicate(vector &lt;int&gt; nums) {
+                <span class="comment">//initialize hash set</span>
+                unordered_set&lt;int&gt; set; 
+        
+                <span class="comment">//iterate through nums</span>
+                for (int i = 0; i < nums.size(); i++) 
+                {
+                    <span class="comment">//FIRST: CHECK IF value in hash set</span>
+                    <span class="comment">//set.find(nums[i]) != set.end()</span>
+                    <span class="comment">/*
+                    if element is found, find() returns iterator pointing to that element
+                    If element is not found, it returns set.end()
+        
+                    set.end(): represents invalid position; does not point to actual element in container.
+                        - used to return boolean for set.find() 
+                    */</span>
+                    if (set.find(nums[i]) != set.end())
+                    {
+                        return true; 
+                    }
+        
+                    <span class="comment">//THEN after checking, append it to set</span>
+                    set.insert(nums[i]);
+                }
+                return false; 
+            }
+        };
+        </pre></code>
+    </details>
+    
+    <details>
+        <summary><strong>Valid Anagram</strong></summary>
+        <pre><code>
+        #include &lt;bits/stdc++.h&gt;
+
+        using namespace std;
+        
+        class Solution {
+        public:
+            bool isAnagram(string s, string t) {
+            <span class="comment">//base-case: check if strings are the same length. If not, they can't be anagrams</span>
+            if (s.length() != t.length())
+            {
+                return false;
+            }
+        
+            <span class="comment">//instantiate unordered map</span>
+            <span class="comment">//key: char (since we're iterating char c: s)</span>
+            <span class="comment">//value: int -> frequency</span>
+            unordered_map&lt;char, int&gt; charCount; 
+        
+            <span class="comment">//count frequency of each character in string s</span>
+            for (char c : s)
+            {
+                charCount[c]++; 
+            }
+        
+            <span class="comment">//iterate through each character in string t</span>
+            for (char c : t)
+            {
+                if (charCount.find(c) != charCount.end())
+                {
+                    <span class="comment">//if character (key) is in the unordered_map, decrement (value) by 1</span>
+                    charCount[c]--;
+                    <span class="comment">//if (value) goes to 0 for character (key), remove character (key) from the map</span>
+                    if (charCount[c] == 0)
+                    {
+                        charCount.erase(c);
+                    }
+                }
+                <span class="comment">//character (key) is not in the map</span>
+                else
+                {
+                    return false;
+                }
+                
+            }
+        
+            <span class="comment">//if all characters (keys) are found, map should return true if empty.</span>
+            return (charCount.empty());
+            }
+        };
+    </code></pre>
+    </details>
+
+    <details>
+    <summary><strong>Two Sum</strong></summary>
+    <pre><code>
+    #include &lt;bits/stdc++.h&gt;
+
+    using namespace std;
+    
+    class Solution {
+    public:
+        vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
+            <span class="comment">//instantiate an ordered map</span>
+            <span class="comment">//stores index and value</span>
+            map&lt;int, int&gt; intMap; 
+    
+            <span class="comment">//initialize vector to hold pair</span>
+            vector&lt;int&gt; pair; 
+    
+            <span class="comment">//iterate through each value in nums</span>
+            for (int i = 0; i < nums.size(); i++)
+            {
+                int complement = target - nums[i];
+    
+                <span class="comment">//check if complement (key) exists in the map</span>
+                if (intMap.find(complement) != intMap.end())
+                {
+                    <span class="comment">//first value in pair</span>
+                    <span class="comment">//intMap[complement]: returns index (value) where key(complement) is</span>
+                    pair.push_back(intMap[complement]); 
+                    
+                    <span class="comment">//second value in pair</span>
+                    <span class="comment">//returns index of nums[i]</span>
+                    pair.push_back(i);
+                    break;
+                }
+    
+                <span class="comment">//key: the number (what we're searching for)</span>
+                <span class="comment">//value: the index (what we want in our result)</span>
+                intMap[nums[i]] = i; 
+            }
+            return pair;
+        }
+    };
+    </pre></code>
+    </details>
+    
+</details>
 
 
 <!-- modal1: containers (unordered_sets explained) -->
