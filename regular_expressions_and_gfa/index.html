@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expressions and GFA</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .sublist {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<p><strong>Problem 1: Interpret the following <span class="highlight" onclick="openModal('expression')">regular expression</span>: (\(0 \cup 1\))\(0^{*}\)</strong>
+<br><br><strong>How: break down/interpret each operation</strong>
+<ul>
+    <li><span class="highlight" onclick="openModal('union')">Union</span>: \(0 \cup 1\)</li>
+    <li><span class="highlight" onclick="openModal('star')">Star Closure</span>: \(0^{*}\)</li>
+    <li><span class="highlight" onclick="openModal('concatenation')">Concatenation</span>: (\(0 \cup 1\))\(0^{*}\)</li>
+</ul>
+<strong id="toggleTitle" onclick="toggleFinalAnswer()" style="cursor:pointer;">Final Answer:</strong>
+<p id="finalAnswer" style="display: none;">The regular expression is a set of strings that are either 0 or 1 followed by 0's.</p>
+</p>
+<p>
+<br><strong>Problem 2: For \(\sum = \{a,b\}\), Interpret the following regular expressions</strong>
+<br><br><span class="highlight" onclick="openModal('syntaxAndOperations')">Here's a review on Syntax and Operations for Reference</span></p>   
+<ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( a^{*} \)</li>
+    <ul class="sublist">
+        <li>We have star closure applied to a, therefore we have 0 or more a's</li>
+        <li>the term 0, given that we're working with strings, can be represented as \(\epsilon\)</li>
+        <li>Therefore, we can say that \( a^{*} = \{ \epsilon, a, aa, aaa, aaaa, ... \} \)</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( ba^{*} \)</li>
+    <ul class="sublist">
+        <li>We have concatenation of b and a's, therefore we have b followed by 0 or more a's</li>
+        <li>Therefore, we can say that \( ba^{*} = \{ b, ba, baa, baaa, ... \} \)</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( a^{*} ba^{*} \)</li>
+    <ul class="sublist">
+        <li>We have concatenation of \(a^{*}\), b, and \(a^{*}\), therefore we have 0 or more a's followed by b followed by 0 or more a's</li>
+        <li>Therefore, we can say that \( a^{*} ba^{*} = \{ \epsilon b \epsilon, \epsilon b a, \epsilon b aa, \epsilon b aaa, ... , a b \epsilon, a b a, a b aa, a b aaa, ... , aa b \epsilon, aa b a, aa b aa, aa b aaa, ... , aaa b \epsilon, aaa b a, aaa b aa, aaa b aaa, ... \} \)</li>
+        <li>To condense this, we can also say that \( a^{*} ba^{*} \) = any string over \(\sum\) containing exactly one b (given that \(\
+            \sum\) is comprised of only a's and b's)</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( \Sigma^{*} b \Sigma^{*} \)</li>
+    <ul class="sublist">
+        <li>We have concatenation of any string over \(\sum^{*}\), b, and any string over \(\sum^{*}\)</li>
+        <li>In other words, you can have any string (including empty) before a b and any string (including empty) after a b.</li>
+        <li>Therefore, \( \Sigma^{*} b \Sigma^{*} \) = any string over \(\sum\) containing at least one b. </li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( \Sigma^{*} aab \Sigma^{*} \)</li>
+    <ul class="sublist">
+        <li>Using past expressions as reference, we can say that \( \Sigma^{*} aab \Sigma^{*} \) = any string over \(\sum\) containing substring aab</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( a^{*} (baa^{*})^{*} \)</li>
+    <ul class="sublist">
+        <li>We have concatenation of \( a^{*}\) and (\(baa^{*})^{*}\) </li>
+        <li>Therefore we have 0 or more a's, followed by 0 or more \(baa^{*}\)</li>
+        <li>We see here that any time there is a b in the string, it will always be followed by an a due the applied star closure of that last a in \(ba\)<strong>\(a^{*}\)</strong></li>
+        <li>Therefore, we can say that \( a^{*} (baa^{*})^{*} \) = Any string over \(\sum\) where b is always followed by an a.</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( (\Sigma \Sigma)^{*} \)</li>
+    <ul class="sublist">
+        <li>This expression either generates no symbols or a pair of symbols from the alphabet.</li>
+        <li>Therefore we can say that \( (\Sigma \Sigma)^{*} \) = any string over \(\sum\) with even length</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( \Sigma (\Sigma \Sigma)^{*} \)</li>
+    <ul class="sublist">
+        <li>This expression generates at least one symbol from the alphabet followed by 0 or more <strong>pairs</strong> of symbols from the alphabet.</li>
+        <li>In other words, it will always generate a string of an odd length</li>
+        <li>Therefore, we can say that \( \Sigma (\Sigma \Sigma)^{*} \) = Any string over \(\sum\) with an odd length</li>
+    </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( (\Sigma \Sigma \Sigma)^{*} \)</li>
+    <ul class="sublist">
+        <li>This expression generates 0 or more triplets of symbols from the alphabet</li>
+        <li>Therefore, we can say that \( (\Sigma \Sigma \Sigma)^{*} \) = Any string over \(\sum\) that is divisible by 3</li>
+    </ul>
+
+</ul>
+</p>
+
+<div id="expression" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('expression')">&times;</span>
+        <h2>Regular Expressions (based on problem)</h2>
+        <ul>
+            <li>In this context, we can say that regular expressions are regular language operations (like union, star closure, etc) applied on inputs (either numerical or letters) that make up a string that a machine accepts.</li>
+        </ul>
+        <h2>Formal Definition of a Regular Expression</h2>
+        <img src="formalDefinitionRegular.png" alt="Formal Definition of a Regular Expression" class="small-img">
+    </div>
+</div> 
+
+<div id="union" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('union')">&times;</span>
+        <h2>Union</h2>
+        <ul>
+            <li>In this context, we can say that the union operation is a set of strings that are either 0 or 1.</li>
+        </ul>
+    </div>
+</div>
+
+<div id="star" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('star')">&times;</span>
+        <h2>Star Closure</h2>
+        <ul>
+            <li>In this context, we can say that the star closure operation is a set of strings that are either 0 or more 0's.</li>
+        </ul>
+    </div>
+</div>
+
+<div id="concatenation" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('concatenation')">&times;</span>
+        <h2>Concatenation</h2>
+        <ul>
+            <li>In this context, we can say that the concatenation operation is a set of strings that is the union of 0 and 1, followed by 0's.</li>
+        </ul>
+    </div>
+</div>
+
+<div id="syntaxAndOperations" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('syntaxAndOperations')">&times;</span>
+        <h2>Syntax</h2>
+        <ul>
+            <li>A symbol to represent the language containing the string consisting of itself</li>
+            <li>\( (a \cup b) \) to represent either of symbols \( a \) or \( b \)</li>
+            <li>\( a \circ b \) or just \( ab \) to represent symbol \( a \) concatenated with symbol \( b \)</li>
+            <li>\( \Sigma \) to represent any symbol from \( \Sigma \)</li>
+            <li>\( a^{*} \) to represent zero or more occurrences of \( a \)</li>
+            <li>\( \Sigma^{*} \) to represent zero or more occurrences of any symbol from \( \Sigma \)</li>
+        </ul>
+        <h2>Operations (in order of highest to lowest precedence)</h2>
+        <ul>
+            <li>Star Closure (\(*\)): Represents zero or more repetitions of a pattern. For example, \(a^*\) means zero or more 'a's.</li>
+            <li>Concatenation: Combines two strings. For example, \(ab\) means 'a' followed by 'b'.</li>
+            <li>Union (\(\cup\)): Represents the choice between two options. For example, \(a \cup b\) means either 'a' or 'b'.</li>
+        </ul>
+        <h2>Laws</h2>
+        <ul>
+            <li>Dominion Law: If concatenation is followed by \(\emptyset\) (emptiness), \(\emptyset\) takes precedence over concatenation</li>
+            <li>Identity Law: </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    function toggleFinalAnswer() {
+        var answer = document.getElementById("finalAnswer");
+        if (answer.style.display === "none") {
+          answer.style.display = "block";
+        } else {
+          answer.style.display = "none";
+        }
+      }
+
+    function toggleSublist(item) {
+        var sublist = item.nextElementSibling;
+        if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+          var currentDisplay = window.getComputedStyle(sublist).display;
+          sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+      }
+
+</script>
+
+</body>
+</html>

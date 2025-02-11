@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFA and DFAs</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<p><strong>Problem 1:</strong> Convert the following <span class="highlight" onclick="openModal('NFA')"> <strong>NFA</strong> </span> into a DFA
+<!-- Insert image -->
+<br>
+<img src="NFA.svg" class="small-img"/> 
+</p>
+
+<p><strong>Step 1: Determine the quantity of states of the DFA.</strong>
+<ul>
+    When converting an NFA to a DFA, each DFA state represents a subset of the NFA's states including the empty set (in other words, \(P(Q)\)). This makes it \(2^{n}\) possible states in the DFA.
+    <li>Therefore, with 3 NFA states, there can be up to \(2^{3}\) = 8 possible DFA states.</li>
+    <li>Since the NFA runs in parallel we can be in the following states in our DFA:</li>
+    <ul>
+        <li>1: state 1</li>
+        <li>2: state 2</li>
+        <li>3: state 3</li>
+        <li>12: states 1 and 2</li>
+        <li>13: states 1 and 3</li>
+        <li>23: states 2 and 3</li>
+        <li>123: states 1, 2, and 3</li>
+        <li>\(\phi\): empty set</li>    
+    </ul>
+</ul>
+<img src="initial.svg" class="small-img"/>
+</p>
+<p><strong>step 2: Determine our accept states</strong>
+<ul>
+    Given that the NFA accepts if any path for the input string ends on an accept state, we can determine our accept states by looking at the NFA's accept states.
+    <li>Considering that our NFA accepts at state 1, our DFA accepts at any of the states that include 1:</li>
+    <ul>
+        <li>1: state 1</li>
+        <li>12: states 1 and 2</li>
+        <li>13: states 1 and 3</li>
+        <li>123: states 1,2, and 3</li>
+    </ul>
+</ul>
+<img src="accept.svg" class="small-img"/>
+</p>
+<p><strong>Step 3: Determine starting state and transition states</strong>
+<br><br><strong>(1) Determining the starting state</strong> 
+<ul>
+    <li>By epsilon closure, for any given state, we include not only that state but also every state that can be reached from it using only epsilon transitions.</li>
+    <li>Since state 1 is our starting state and there is an epsilon transition from state 1 to state 3, the epsilon closure of state 1 is {1,3}.</li>
+    <li>Therefore, our starting state is {1,3}.</li>
+</ul>
+<img src="start.svg" class="small-img"/>
+For reference (transition table): 
+<img src="NFA.svg" class="small-img"/>
+<br><strong>(2) Determining the transition states</strong>
+<table>
+    <tr>
+        <th>Present State</th>
+        <th>Next state of Input a</th>
+        <th>Next State of Input b</th>
+    </tr>
+    <tr>
+        <td>\(\phi\)</td>
+        <td><td>
+    </tr>
+    <tr>
+        <td>{1}</td>
+        <td>\(\phi\) (cant go anywhere)</td>
+        <td>{2}</td>
+    </tr>
+    <tr>
+        <td>{2}</td>
+        <td>{23} (on a: we can go from state 2 <strong>to state 2</strong>, and from state 2 <strong>to state 3</strong>)</td>
+        <td>{3} (on b: we can go from state 2 <strong>to state 3</strong>)</td>
+    </tr>
+    <tr>
+        <td>{3}</td>
+        <td>{13} (epsilon closure; state 1 in NFA is state 13 by epsilon closure in DFA)</td>
+        <td>\(\phi\) (cant go anywhere)</td>
+    </tr>
+    <tr>
+        <td>{12}</td>
+        <td>{23} (on a: we can reach from state 2 <strong>to state 2</strong>, and from state 2 <strong>to state 3</strong>)</td>
+        <td>{23} (on b: we can reach from state 1 <strong>to state 2</strong> and from state 2 <strong>to state 3</strong>)</td>
+    </tr>
+    <tr>
+        <td>\(\rightarrow\){13}</td>
+        <td>{13} (on a: we reach from state 3 to state 1, and by epsilon closure state 1 yields state 13 so it's a self loop)</td>
+        <td>{2} (on b: we can reach from state 1 <strong>to state 2</strong>)</td>
+    </tr>
+    <tr>
+        <td>{23}</td>
+        <td>{123} (on a: we can reach from state 2 <strong>to state 2</strong>, from state 2 <strong>to state 3</strong>, and from state 3 <strong>to state 1</strong>)</td>
+        <td>{3} (on b: we can reach from state 2 <strong>to state 3</strong>)</td>
+    </tr>
+    <tr>
+        <td>{123}</td>
+        <td>{123} (on a: we reach from state 2 <strong>to state 2</strong>, from state 2 <strong>to state 3</strong>, and from state 3 <strong>to state 1</strong>)</td>
+        <td>{23} (on b: we reach from state 1 <strong>to state 2</strong>, and from state 2 <strong>to state 3</strong>)</td>
+    </tr>
+</table>
+<img src="transition.svg" class="small-img"/>
+</p>
+<p>
+Given that we were able to convert an NFA to a DFA, it can be said that every langauge that can be recognized with an NFA can also be recognized with a DFA.
+<br><br> Therefore, we can also say that, <i id="regularDefinition" class="highlight">A language is regular if and only if it can be recognized by an NFA.</i>
+</p>
+<p>
+    <strong>Problem 2: Explain the Closure of Regular Languages by union, using NFAs</strong>
+    <br><br> <strong>Step 1: Define \(N_{a}\) and \(N_{b}\)</strong>
+    <ul>
+        <li> Let \(N_{A} = \{Q_{A}, \sum, \delta_{A}, q_{0A}, F_{A}\}\) and \(N_{B} = \{Q_{B}, \sum, \delta_{B}, q_{0B}, F_{B}\}\) be regular languages A and B.</li>
+    </ul>
+    <img src="define.png">
+    <br><br><strong>Step 2: Construct a new NFA</strong>
+    <ul>
+        <li> Let new NFA N = \(\{Q, \sum, \delta, s, F\}\)</li>
+        <ul>
+            <li>We've defined a new NFA that contains a start state that connects s in N to \(q_{0A}, q_{0B}\) by \(\epsilon\)</li>
+        </ul>
+    </ul>
+    <img src="new_nfa.png">
+    <br><br><strong>Step 3: Prove that \(A \cup B\) is Regular </strong>
+    <ul>
+        <li>N accepts everything \(N_{A}\) or \(N_{B}\) accept, and nothing else</li>
+        <li>By <span class="highlight" onclick="openModal('recognition')">recognition</span>, N accepts everything in A or in B, and nothing else.</li>
+        <li>By <span class="highlight" onclick="openModal('union')">union</span>, N accepts everything in \(A \cup B\) and nothing else</li>
+        <li>Given that N accepts strings in either \(N_{A}\) or \(N_{B}\), N therefore recognizes \(A \cup B\)</li>
+        <li>Since we now have an NFA N that recognizes \(A \cup B\) and by our <a href="#regularDefinition">previous definition for a language using NFAs</a>, we can say that \(A \cup B\) is regular. (end of proof)</li>
+    </ul>
+</p>
+
+<p><strong>Problem 3: Interpret the proof for closure of regular languages by <span class="highlight" onclick="openModal('concatenation')">concatenation</span></strong>
+<br><br><strong>Step 1: Interpret Construction</strong>
+<img src="concatConstruction.png" class="small-img"/>
+<ul>
+    <li>To make concatenation possible where any string from A can be combined with any string from B, we add \(\epsilon\) transitions from each accept state of \(N_{A}\) to the start state of \(N_{B}\) </li>
+</ul>
+<img src="constructionResult.png" class="small-img"/>
+<br><strong>Interpreting the resulting NFA</strong>
+<br><br><strong>Recognizing Strings in A (Language of \(N_{A})\)</strong>
+<ul>
+    <li>The NFA starts in the initial state of \(N_{A}\) via an \(\epsilon\) transition from the newly introduced start state \(s\)</li>
+    <li>It processes input symbols and moves through \(N_{A}\) normally.</li>
+    <li>If the input matches a string in A, the automaton reaches one of \(N_{A}\)'s accept states' </li>
+</ul>
+<strong>Transition from \(N_{A}\) to \(N_{B}\) </strong>
+<ul>
+    <li>Instead of stopping at an accept state of \(N_{A}\), the automaton uses \(\epsilon\) transitions to jump to the start of \(N_{B}\)</li>
+    <li>the \(\epsilon\) transitions allow the NFA to transition without consuming any input symbol</li>
+</ul>
+<strong>Recognizing Strings in B (Language of \(N_{B}\))</strong>
+<ul>
+    <li>Once in \(N_{B}\), the automaton continues processing the remaining input according to \(N_{B}\)'s transition rules</li>
+    <li>If second portion of input belongs to B, the automaton reaches an accept state of \(N_{B}\), making the entire string acceptable in the new NFA.</li>
+</ul>
+<strong>Key Takeaways</strong>
+<ul>
+    <li> the epsilon transitions allow the automaton to "guess" when to transition from \(N_{A}\) to \(N_{B}\)</li>
+    <li>\(N_{B}\) only starts processing once \(N_{A}\) has completed recognizing a valid prefix</li>
+    <li>The final accept states belong to \(N_{B}\), ensuring that a string is only accepted if both components satisfy their respective NFAs. </li>
+</ul>
+<br><strong>Step 2: Interpret the Proof</strong>
+<img src="concatProof.png" class="small-img"/>
+</p>
+<p>
+<strong>Explain the Closure of Regular Languages by <span class="highlight" onclick="openModal('star')">star closure</span>, using NFAs</strong>    
+<br><br><strong>Step 1: Interpret Construction</strong>
+<img src="starConstruction.png" class="small-img"/>
+<ul>
+    <li>To make star closure possible, we introduce a new start state, which is also an accept state.</li>
+    <li>We add the following \(\epsilon\) transitions</li>
+    <ul>
+        <li>From the new start state \(s\) to the old start state of \(N_{A}\)</li>
+        <li>From every accept state in \(N_{A}\) back to its start state \(s\)</li>
+    </ul>
+    <li>this allows the machine to process multiple occurences of words from A and ensures \(\epsilon\) is accepted as well.</li>
+</ul>
+<br><strong>Step 2: Interpret the proof</strong>
+<img src="starProof.png" class="small-img"/>
+</p>
+
+<!-- modal1: NFA -->
+<div id="NFA" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('NFA')">&times;</span>
+      <h2>NFA</h2>
+      It looks similarly to a DFA with the exception that...
+      <ul>
+        <li>It can have more than one possible transition per state per input symbol.</li>
+        <li>It can have epsilon transitions.</li>
+        <li>It doesn't have to have a transition for every state for every input symbol.</li>
+      </ul>
+      Additionally, it functions similarly to a DFA, except acceptance is nondeterministic 
+      <ul>
+        <li>An NFA accepts if any path for the input string ends on an accept state.</li>
+      </ul>
+      Formal Definition of an NFA: <br>
+        <ul>
+            <li>Q: finite set of states</li>
+            <li>Σ: finite set of input symbols</li>
+            <li>δ: Q x Σ \(\rightarrow\) P(Q) (transition function)</li>
+            <ul>
+                <li>Instead of going from symbol and state to a single state, it goes from state and symbol to the power set of state sets</li>
+            </ul>
+            <li>\(q_{0}\in Q\) (start state)</li>
+            <li>\(F \subseteq Q\) (accept states)</li>
+        </ul>
+        It functions much like a <span class="highlight" onclick="openModal('DFA')"> <strong>threaded DFA</strong></span>
+    </div>
+</div>
+
+<div id="DFA" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('DFA')">&times;</span>
+        <img src="threaded_DFA.png"> 
+        <ul>
+            <li> In NFA-to-DFA conversion, we only take into consideration the unique paths of the NFA that have been accepted.</li>
+            <li> Missing transitions dont add anything to the next set of states.</li>
+        </ul>
+    </div>
+</div> 
+
+<div id="recognition" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('recognition')">&times;</span>
+        <h2>Recognition</h2>
+        <ul>
+            <li> By definition of recognition, machine N recognizes language A if A = \(\{a \mid N \text{ accepts } a\}\) </li>
+            <ul>
+                <li>In other words, if you run any string a through machine N and it accepts, then a is a member of language A.</li>
+            </ul>
+            <li>Again by defnition of recognition, machine N recognizes language B if N = \(\{b \mid N \text{ accepts } b\}\)</li>
+            <ul>
+                <li>In other words, if you run any string b through machine N and it accepts, then b is a member of language B.</li>
+            </ul>
+        </ul>
+    </div>
+</div> 
+
+<div id="union" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('union')">&times;</span>
+        <h2>Union</h2>
+        <ul>
+            <li>In this context, N is set up such that it accepts a string if either of the original machines \(N_{A}\) for langauge A and \(N_{B}\) for language B accept that string. </li>
+        </ul>
+    </div>
+</div> 
+
+<div id="concatenation" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('concatenation')">&times;</span>
+        <h2>Concatenation</h2>
+        <ul>
+            <li>By definition of concatenation, \(A \cdot B = \{xy \mid x \in A \text{ and } y \in B\}\)</li>
+            <ul>
+                <li>In other words, \(A \cdot B\) is the set of all strings that can be formed by taking any string x from A and concatenating (combining) it with any string y from B</li>
+            </ul>
+        </ul>
+    </div>
+</div> 
+
+<div id="star" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('star')">&times;</span>
+        <h2>Star (Kleene) Closure</h2>
+        <ul>
+            <li>By definition of the Kleene star operation on a language A, \(A^* = \{ \varepsilon \} \cup \{ x_1 x_2 \dots x_n \mid n \geq 1, x_i \in A \text{ for } 1 \leq i \leq n \}\) </li>
+            <ul>
+                <li>In other words, the kleene star operation on a language A allows for the repitition of strings from A, zero or more times including the empty string \(\epsilon \)</li>
+            </ul>
+        </ul>
+    </div>
+</div> 
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
