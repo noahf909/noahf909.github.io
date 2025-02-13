@@ -203,13 +203,91 @@
     </ul>
 </ul>
 </p>
+
 <p>
 <br><strong>Problem 3: Convert the following DFA into a GFNA</strong>
 <br><br> <span class="highlight" onclick="openModal('GNFA')">Here's a review on GNFAs for Reference</span></p>
-<img src="DFA.svg" alt="DFA" class="small-img">
+<img src="dfa.svg" alt="DFA" class="small-img">
 <strong>Step 1: Determine start and accept states</strong>
-
+<ul>
+    <li>Starting state s will come before \(q_{1}\) (old start state) with a \(\epsilon\) transition in between them</li>
+    <li>accepting state a will be above \(q_{2}\) (old accept state) with a \(\epsilon\) transition in between</li>
+</ul>
+<img src="initialStates.svg" class="small-img">
+<br><br><strong>Step 2: Choose a state to rip and construct the ripping table</strong>
+<ul>
+    <li>It's best to rip the state with the most transitions, so we will rip \(q_{2}\) (\(q_{2}\) will be our r)</li>
+    <li>There are four transitions coming in and out of \(q_{2}\) (excluding self loops). This will be the amount of rows in the ripping table</li>
+    <li>Self-loops will contain a star closure and transitions with two or more symbols will contain a "\(\mid\)" between them in the table</li>
+</ul>
+<br><br> Now we'll construct the ripping table:
+<br><Br><span class="highlight" onclick="scrollToSection('syntaxAndOperations')"> Remember Identity Laws for this one </span>
+<table style="width: 100%; border-collapse: collapse; text-align: center; border: 1px solid black;">
+    <tr>
+        <th style="border: 1px solid black;">a</th>
+        <th style="border: 1px solid black;">r</th>
+        <th style="border: 1px solid black;">b</th>
+        <th style="border: 1px solid black;">\(R_{ar}\)</th>
+        <th style="border: 1px solid black;">\(R_{r}\)</th>
+        <th style="border: 1px solid black;">\(R_{rb}\)</th>
+        <th style="border: 1px solid black;">\(R_{ab}\)</th>
+        <th style="border: 1px solid black;">\( (R_{ar})(R_{r})^{*}(R_{rb})\mid(R_{ab})\)</th>
+        <th style="border: 1px solid black;">Reduced</th>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">1</td>
+        <td style="border: 1px solid black;">2</td>
+        <td style="border: 1px solid black;">3</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">a</td>
+        <td style="border: 1px solid black;">∅</td>
+        <td style="border: 1px solid black;">(b)(b)* (a) | (∅)</td>
+        <td style="border: 1px solid black;">bb*a</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">1</td>
+        <td style="border: 1px solid black;">2</td>
+        <td style="border: 1px solid black;">a</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">ε</td>
+        <td style="border: 1px solid black;">∅</td>
+        <td style="border: 1px solid black;">(b)(b)* (ε) | (∅)</td>
+        <td style="border: 1px solid black;">bb*</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">3</td>
+        <td style="border: 1px solid black;">2</td>
+        <td style="border: 1px solid black;">3</td>
+        <td style="border: 1px solid black;">a|b</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">a</td>
+        <td style="border: 1px solid black;">∅</td>
+        <td style="border: 1px solid black;">(a|b)(b)* (a) | (∅)</td>
+        <td style="border: 1px solid black;">(a|b)b*a</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">3</td>
+        <td style="border: 1px solid black;">2</td>
+        <td style="border: 1px solid black;">a</td>
+        <td style="border: 1px solid black;">a|b</td>
+        <td style="border: 1px solid black;">b</td>
+        <td style="border: 1px solid black;">ε</td>
+        <td style="border: 1px solid black;">∅</td>
+        <td style="border: 1px solid black;">(a|b)(b)* (ε) | (∅)</td>
+        <td style="border: 1px solid black;">(a|b)b*</td>
+    </tr>
+</table>
+<br><br><strong>Step 3: Repair the machine</strong>
+<ul>
+    <li>We will now replace the old transitions with the new regex transitions</li>
+    <li>Given our table, our set of states are as follows: \( \{a,b\} \) = states \(1, 3, a\)</li>
+    <li>Construct GNFA with those states and their respective reduced regex transitions</li>
+</ul>
+<img src="gnfa.svg" alt="GNFA" class="small-img">
 </p>
+
 
 <div id="expression" class="modal">
     <div class="modal-content">
@@ -312,16 +390,20 @@
             <li>Apply star closure to any self-loop symbol transitions</li>
             <li>Construct the "ripping table" based on the following forumula ( \( (R_{ar})(R_{r})^{*}(R_{rb})\mid(R_{ab}) \)) where...</li>
             <ul>
-                <li>\(R_{ar}\) is the regex of the transition from the state being ripped to the accepting state</li>
-                <li>\(R_{r}\) is the regex of the self-loop of the state being ripped</li>
-                <li>\(R_{rb}\) is the regex of the transition from the accepting state to the state being ripped</li>
-                <li>\(R_{ab}\) is the regex of any other transition in the machine</li>
-                <li>Number of rows in the table should be equivalent to the number of transitions (excluding self-loops) attached to the ripped state.</li>
+                <li>r: the state that is being ripped </li>
+                <li>a: The starting state of a transition <strong>before it reaches r</strong></li>
+                <li>b: The destination state <strong>after transitioning through r (excluding self-loops)</strong></li>
+                <li>\(R_{ar}\): the transition (regex) from a to r</li>
+                <li>\(R_{r}\): any self-loop transitions on r</li>
+                <li>\(R_{rb}\): the transition (regex) from r to b </li>
+                <li>\(R_{ab}\): the transition (regex) from a to b (\(\emptyset\) used to represent when transition cannot be made directly from a to b)</li>
+                <li>reduced: the regex expression after evaluating \( (R_{ar})(R_{r})^{*}(R_{rb})\mid(R_{ab}) \)</li>
             </ul>
-            <li>Example Table: </li>
         </ul>
         Repair 
-        
+        <ul>
+            <li>Contruct GNFA with the reduced regex transitions from a to b</li>
+        </ul>
     </div>
 </div>
 
