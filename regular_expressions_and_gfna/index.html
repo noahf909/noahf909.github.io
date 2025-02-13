@@ -174,8 +174,41 @@
         <li>This expression generates 0 or more triplets of symbols from the alphabet</li>
         <li>Therefore, we can say that \( (\Sigma \Sigma \Sigma)^{*} \) = Any string over \(\sum\) that is divisible by 3</li>
     </ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( \emptyset a^{*} \)</li>
+    <ul class="sublist">
+        <li>This expression represents the concatenation of the empty set with the Kleene star of \( a \).</li>
+        <li>By dominion law, any concatenation with the empty set results in the empty set.</li>
+        <li>Therefore, \( \emptyset a^{*} = \emptyset \).</li>
+    </ul>
 
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( a^{*} \varepsilon \)</li>
+    <ul class="sublist">
+        <li>\( a^{*} \) represents the set of all strings formed by concatenating zero or more occurrences of \( a \).</li>
+        <li>\( \varepsilon \) is the empty string, which acts as an identity in concatenation.</li>
+        <li>Thus, \( a^{*} \varepsilon = a^{*} \).</li>
+    </ul>
+
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( a^{*} \cup \emptyset \)</li>
+    <ul class="sublist">
+        <li>The union of \( a^{*} \) and the empty set includes all elements in \( a^{*} \) plus the empty set (which contributes nothing).</li>
+        <li>Since \( a^{*} \) already contains the empty string, adding \( \emptyset \) has no effect.</li>
+        <li>Thus, \( a^{*} \cup \emptyset = a^{*} \).</li>
+    </ul>
+
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\( \emptyset^{*} \)</li>
+    <ul class="sublist">
+        <li>The Kleene star of the empty set represents all possible concatenations of elements from \( \emptyset \).</li>
+        <li>Since \( \emptyset \) contains no elements, the only valid string is the empty string \( \varepsilon \).</li>
+        <li>Thus, \( \emptyset^{*} = \{ \varepsilon \} \).</li>
+    </ul>
 </ul>
+</p>
+<p>
+<br><strong>Problem 3: Convert the following DFA into a GFNA</strong>
+<br><br> <span class="highlight" onclick="openModal('GNFA')">Here's a review on GNFAs for Reference</span></p>
+<img src="DFA.svg" alt="DFA" class="small-img">
+<strong>Step 1: Determine start and accept states</strong>
+
 </p>
 
 <div id="expression" class="modal">
@@ -241,8 +274,54 @@
         <h2>Laws</h2>
         <ul>
             <li>Dominion Law: If concatenation is followed by \(\emptyset\) (emptiness), \(\emptyset\) takes precedence over concatenation</li>
-            <li>Identity Law: </li>
+            <li>Identity Law</li>
+            <ul>
+                <li>if concatenation is followed by \(\epsilon\), then \(\epsilon\) acts as the identity element, meaning that concatenating \(\epsilon\) leaves the other operand unchanged.</li>
+                <li>if union is followed by \(\emptyset\), then \(\emptyset\) acts as the identity element, meaning that union with \(\emptyset\) leaves the other operand unchanged.</li>
+            </ul>
         </ul>
+    </div>
+</div>
+
+<div id="GNFA" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('GNFA')">&times;</span>
+        <h2>What are GNFAs</h2>
+        <ul>
+            <li>A GNFA is a type of NFA that uses regular expressions as its transitions alphabet (expect regular expressions as transitions in the machine)</li>
+        </ul>
+        <h2>General Rules/Properties of GNFAs</h2>
+        <ul>
+            <li>It must always have a start state and an accept state where...</li>
+            <ul>
+                <li><strong>Nothing an transition into the start state</strong></li>
+                <li><strong>Nothing can transition out of the accept state</strong></li>
+            </ul>
+            <li>There should only be two states left in the machine at the end of constructing a GNFA - the start stat and the accept state with a regex transition between the two.</li>
+        </ul>
+        <h2>Initial Instructions for Constructing a GNFA out of a DFA</h2>
+        <ul>
+            <li>Add new start state before old start state, with a \(\epsilon\) transition between the two states </li>
+            <li>Add new accept state above old accept state, with a \(\epsilon\) transition between the two states </li>
+            <li>Convert all multiple symbol transitions (0,1) or (a,b), to use the union operator (so \(0 \cup 1\), \(a \cup b\))</li>
+        </ul>
+        <h2>Ripping and Repair Instructions for Constructing the GNFA</h2>
+        Ripping 
+        <ul>
+            <li>Select a random state (cannot be the start or accept state) to rip or pull out of the machine</li>
+            <li>Apply star closure to any self-loop symbol transitions</li>
+            <li>Construct the "ripping table" based on the following forumula ( \( (R_{ar})(R_{r})^{*}(R_{rb})\mid(R_{ab}) \)) where...</li>
+            <ul>
+                <li>\(R_{ar}\) is the regex of the transition from the state being ripped to the accepting state</li>
+                <li>\(R_{r}\) is the regex of the self-loop of the state being ripped</li>
+                <li>\(R_{rb}\) is the regex of the transition from the accepting state to the state being ripped</li>
+                <li>\(R_{ab}\) is the regex of any other transition in the machine</li>
+                <li>Number of rows in the table should be equivalent to the number of transitions (excluding self-loops) attached to the ripped state.</li>
+            </ul>
+            <li>Example Table: </li>
+        </ul>
+        Repair 
+        
     </div>
 </div>
 
