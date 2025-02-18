@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFA and DFAs</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+        .sublist {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<p><strong>Problem 1: Is B regular? \(B = \{0^{n}1^{n} \mid n \geq 0\}\)</strong>
+<br><br> <strong>Step 1: Understand </strong><span class="highlight" onclick="openModal('regular')">what constitutes a regular Language</span>
+<br><br> <strong>Step 2: Evaulate the expression</strong>
+<ul>
+    <li onclick="toggleSublist(this)" style="cursor: pointer;">\(0^{n}1^{n}\mid n \geq 0\)</li>
+    <ul class="sublist">
+        <li>The expression means that for every \(n\), there are exactly \(n\) zeros followed by \(n\) ones.</li>
+        <li>Because \(n\) can be arbitrarily large, a finite automaton would need an infinite number of states to remember how many zeros it has seen in order to match them with the same number of ones.</li>
+        <li>Since DFAs and NFAs have a fixed, finite number of states, they cannot perform this <strong>unbounded counting.</strong></li>
+        <li>Therefore, no DFA or NFA exists for this language, which means it is not a regular language.</li>
+    </ul>
+</ul>
+</p>
+<p><strong>Problem 2: What is the pigeonhole principle and how does it relate to DFAs?</strong>
+<br><br><strong> Step 1: Explain the Pigeonhole Principle</strong><br>
+<ul>
+    <li>In the simplest terms possible, if you have n cages and n-1 pigeons, there must be a cage that holds more than one pigeon.</li>
+</ul>
+<br><strong> Step 2: Explain how it relates to DFAs</strong><br>
+<ul>
+    <li>A DFA has a limited (finite) number of states.</li>
+    <li>When a DFA processes an input with more symbols than available states, it must revisit a state (by the pigeonhole principle).</li>
+    <li>This means the DFA cycles, or loops, through some of its states.</li>
+    <ul>
+        <li>This cycle can be repeated (or "pumped") any number of times, which is a key property of regular languages and leads us to the construct of <strong>pumping lemmas</strong></strong>.</li>
+        <li>If a language requires a strict one-to-one matching (like \(0^n1^n\)), it cannot be captured by these cycles, so it is non-regular.</li>
+    </ul>
+</ul>
+</p>
+<p><strong>Problem 3: Explain The Proof: The Pumping Lemma for Regular Languages</strong>
+<br><br><strong>Step 1: Understand What <span class="highlight" onclick="openModal('pump')">Pumping Lemma</span> Is</strong>
+<br><br><strong>Step 2: Interpreting the Proof</strong>
+<img src="proof.png" class="small-img" alt="Proof of Pumping Lemma">
+<ul>
+    <li>We start off with a DFA recognizing a language A and let the pumping length, p, be set to the number of states in our DFA.</li>
+  
+    <li>We consider a string s in the language A such that its length (n) is at least p.</li>
+  
+    <li>We need to show that s can be split into three parts (x, y, z) in a way that meets the pumping conditions.</li>
+  
+    <li>
+      <strong>Understanding the Sequence of States:</strong>
+      <ul>
+        <li>As the DFA reads s, it moves through a sequence of states while processing each character.</li>
+        <li>Since the DFA has only p states but the string is at least p characters long, the pigeonhole principle tells us that at least one state must repeat.</li>
+      </ul>
+    </li>
+  
+    <li>
+      <strong>Identifying the Repeat:</strong>
+      <ul>
+        <li>We name the first occurrence of this repeated state as r<sub>j</sub> and the second as r<sub>k</sub>.</li>
+        <li>This means that while processing s, the DFA enters the same state at two different points.</li>
+      </ul>
+    </li>
+  
+    <li>
+      <strong>Splitting the String:</strong>
+      <ul>
+        <li><strong>x:</strong> The part of s that takes the DFA from the start to the first occurrence of the repeated state.</li>
+        <li><strong>y:</strong> The part of s that takes the DFA from the first to the second occurrence of the repeated state (this is the "repeatable" part).</li>
+        <li><strong>z:</strong> The remaining part of s.</li>
+      </ul>
+    </li>
+  
+    <li>
+      <strong>Why This Works:</strong>
+      <ul>
+        <li>Because the DFA ends up in the same state after reading x and then xy, it means that we can repeat y any number of times and still stay within the language.</li>
+        <li>Since j ≠ k, we know that y is not empty (|y| > 0).</li>
+        <li>Since the repeated state happens within the first p steps, we know that |xy| ≤ p.</li>
+      </ul>
+    </li>
+  
+    <li>Thus, we have proven that all three conditions of the pumping lemma hold, meaning any sufficiently long string in a regular language can be "pumped."</li>
+  
+    <li>This proof helps us show that some languages are <strong>not</strong> regular—because if we find a language where this pumping property doesn't hold, then the language must be more complex than what a DFA can handle.</li>
+  </ul>  
+</p>
+
+<!--Regular Languages -->
+<div id="regular" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('regular')">&times;</span>
+        <!-- Brief Explanation of what constitutes a regular language -->
+        <h2>Understanding What Makes a Language Regular</h2>
+        <ul>
+            <li> Whenever a DFA exists for a language, it means an NFA exists for that language as well, which by definition makes that language regular.</li>
+            <li>DFAs (or NFAs) can only recognize languages that don't require more memory than what a finite number of states can hold.</li>
+            <ul>
+                <li>If a language has properties that require unbounded counting, nested/recursive structures, or matching, then that language is no longer regular </li>
+            </ul>
+        </ul>
+        Additionally, you can find more information on regular languaegs here
+    </div>
+</div> 
+
+<!-- pumping lemmas -->
+<div id="pump" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('pump')">&times;</span>
+        <!-- Brief Explanation of what constitutes a regular language -->
+        <h2>Pumping Lemmas</h2>
+        <h3>What:</h3> 
+        <ul>
+            <li>The Pumping Lemma is a way to prove that some languages are not regular (cannot be recognized by simple machines like finite state automatas)</li>
+            <li>It states the following:</li>
+            <ul>
+                <li>If a language is regular, long enough words in it must have a repeatable (pumpable) part</li>
+                <li>If you can find a word where no part can be pumped (repeated) without breaking the rules of the language, then the language is not regular</li>
+            </ul>
+            <li>It's called a lemma (step to proving larger theorem) because we use it to show that some languages are not regular.</li>
+            <li>Therefore, it's implied that pumping lemmas are mainly used for proofs by contradiction.</li>
+        </ul>
+        <h3>Formal Definition (The Three Rules)</h3>
+        Formal Definition: The Pumping Lemma for regular languages states that if a language is regular, then any sufficiently long string in teh language can be split into three parts \(x,y,z\) such that the following rules hold:
+        <ul>
+            <li>Rule 1: The string can be split as 
+                \[
+                    s = xyz
+                \]  
+                where \(x,y,z\) are substrings
+            </li>
+            <li>Rule 2: The middle part (\(y\)) must be repeatable (pumped): 
+                \[
+                xy^iz \in L \text{ for all } i \geq 0
+                \]
+                This means you can remove \(y \, (i=0)\) or repeat it multiple times (i = 2, 3, ...) and the resulting
+                string should still be valid in the language.
+                <br>\(y^i\) is just y concatenated with itself \(i\) times.
+            </li>
+            <li>Rule 3: The pumped part \(y\) must not be empty and must be within a limited length:</li>
+            <ul>
+                <li>\(|y| > 0\): The repeatable part can't be empty</li>
+                <li>\(|xy| \leq p\): The first two parts together must be within the "pumping length" \(p\), which depends on the language.</li>
+            </ul>
+        </ul>
+    </div>
+</div> 
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    function toggleSublist(item) {
+        var sublist = item.nextElementSibling;
+        if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+          var currentDisplay = window.getComputedStyle(sublist).display;
+          sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+      }
+</script>
+
+</body>
+</html>
