@@ -128,9 +128,85 @@
             <strong>Problem 2: How do we convert a CFG to Chomsky Normal Form?</strong>
         </p>
         <p>
-            <strong>Problem 3: </strong>
+            <strong>Problem 3: How do we construct a <span class="highlight" onclick="openModal('pushdownModal')">pushdown automaton</span> from a CFG?</strong>
+        </p>
+        <p>
+            <strong>Problem 4: How do we show that a PDFA recognizes CFGs (Context-Free Languages)</strong>
+
+        </p>
+        <p>
+            <strong>Problem 5: PDA-CFG Equivalence Statements?</strong>
+            <ul>
+                <li>1. A language is context-free if and only if a context-free grammer generates it.</li>
+                <li>2. A language is context-free if and only if a pushdown automaton recognizes it</li>
+                <li>3. A context-free language generates a language if and only if a pushdown automaton recognizes it</li>
+                <li>Corollary: Every regular language is also a context-free language.</li>
+            </ul>
+        </p>
+        <p>
+            <strong>Problem 6: How do we apply the pumping lemma to CFGs? (Consider for Homework III)</strong>
         </p>
 
+        <div id="pushdownModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('pushdownModal')">&times;</span>
+                <h2>Pushdown Automaton</h2>
+                <ul>
+                    <li>An NFA that on every step can either...</li>
+                    <ul>
+                        <li>Ignore its stack</li>
+                        <li>Push a variable onto the stack</li>
+                        <li>"Pop" a variable from the stack</li>
+                        <ul>
+                            <li>It first peaks the stack</li>
+                            <li>After peaking, it is only allowed to take that transition if the symbol its looking for is on top of the stack.</li>
+                            <li>If it is, it pops that symbol as one of its non-deterministic choices.</li>
+                        </ul>
+                        <li>Both push and pop</li>
+                    </ul>
+                </ul>
+                <h2>Interpreting Common Components of a Pushdown Automaton (Example)</h2>
+                <img src="pushdown.png" class="small-img">
+                <ul>
+                    <li>\(\epsilon \rightarrow $\) From \(q_0 \text{ to } q_1\)</li>
+                    <ul>
+                        <li>Reads nothing from input \(\epsilon)</li>
+                        <li>Push $ onto the stack</li>
+                        <li>In this case, $ represents the bottom of the stack (initializing it)</li>
+                    </ul>
+                    <li>\(0, \epsilon \rightarrow 0\) From \(q_1 \text{ to } q_1\)</li>
+                    <ul>
+                        <li>Reads 0 from input</li>
+                        <li>Push 0 onto the stack</li>
+                    </ul>
+                    <li>\(1, 0 \rightarrow \epsilon\) From \(q_1 \text{ to } q_2\)</li>
+                    <ul>
+                        <li>Reads 1 from input</li>
+                        <li>Peaks the stack and sees a 0</li>
+                        <li>Pops the 0 from the stack</li>
+                    </ul>
+                    <li>\(1, 0 \rightarrow \epsilon\) From \(q_2 \text{ to } q_2\)</li>
+                    <ul>
+                        <li>Reads 1 from input</li>
+                        <li>Peaks the stack and sees a 0</li>
+                        <li>Pops the 0 from the stack</li>
+                    </ul>
+                    <li>\(\epsilon, $ \rightarrow \epsilon\) From \(q_2 \text{ to } q_3\)</li>
+                    <ul>
+                        <li>Reads nothing from input</li>
+                        <li>Peaks the stack and sees $ (stack is empty)</li>
+                        <li>Accepts the string</li>
+                    </ul>
+                    <li>Given that it pushes a 0 onto the stack when it reads a 0, and pops a 0 when it reads a 1...</li>
+                    <ul>
+                        <li>It is only able to accept the string when the stack is empty.</li>
+                        <li>In order for the stack to be empty, there must be an equal number of 0s and 1s</li>
+                        <li>The language for this PDA is therefore \(\{0^{n}1^{n}, n \geq 0\}\)</li>
+                    </ul>
+                </ul>
+                
+            </div>
+        </div>
 
         <script>
             function openModal(modalId) {
