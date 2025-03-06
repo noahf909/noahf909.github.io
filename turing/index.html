@@ -106,8 +106,59 @@
             display: none;
         }
     </style>
+<!--
+DFAs NFAs PDAs
+- restricted memory
+
+Turing machines
+- unrestricted memory
+- input/output in tape format
+- produce other forms of output
+- can move lbackwards! 
+- accept/reject (halting) states are final
+- not guaranteed to halt since it can move freely; can loop infinitely - Accept, reject or hang/loop/fail to halt
+- 
+Both
+- decide languages
+- transition based on current state and tape symbol at current position (like DFA)
+-->
 </head>
     <body>
         
     </body>
+    
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+        
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+    
+        function toggleFinalAnswer() {
+            var answer = document.getElementById("finalAnswer");
+            if (answer.style.display === "none") {
+              answer.style.display = "block";
+            } else {
+              answer.style.display = "none";
+            }
+          }
+    
+        function toggleSublist(item) {
+            var sublist = item.nextElementSibling;
+            if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+              var currentDisplay = window.getComputedStyle(sublist).display;
+              sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+            }
+          }
+    
+    </script>
 </html>
