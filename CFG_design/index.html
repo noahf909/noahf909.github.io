@@ -105,9 +105,16 @@
         .sublist {
             display: none;
         }
+        .center {
+            text-align: center;
+        }
     </style>
 </head>
     <body>
+        <div class="center">
+            <h2>CFG, PDA, PDFA, and Pumping Lemma on CFGs</h2>
+        </div>
+        
         <p>
         <strong>Problem 1: What constitutes a CFG in Chomsky Normal Form?</strong>
         <ul>
@@ -115,7 +122,7 @@
             <ul>
                 <li>1. \(A \rightarrow BC\) - A non-terminal symbol on the left, and two non-terminal symbols on the right.</li>
                 <li>2. \(A \rightarrow a\) - A non-terminal symbol on the left, and a terminal symbol on the right.</li>
-                <li>3. \(S \rightarrow \epsilon\) - The start symbol on the left, and the empty string on the right.</li>
+                <li>3. \(S \rightarrow \epsilon\) - The start symbol on the left, and the empty string on the right. NOTE: the only production that can have \(\epsilon\) on the right side is the one with the start symbol on the left-hand side.</li>
             </ul>
             <li>\(A, B, C\) are variables (non-terminal symbols)</li>
             <li>\(a\) is a terminal symbol</li>
@@ -125,13 +132,181 @@
         </ul>
         </p>
         <p>
-            <strong>Problem 2: How do we convert a CFG to Chomsky Normal Form?</strong>
+            <strong>Problem 2: How do we convert the following CFG to Chomsky Normal Form?</strong>
+            \begin{align*}
+                S &\rightarrow ASA \mid aB \\
+                A &\rightarrow B \mid S \\
+                B &\rightarrow b \mid \epsilon 
+            \end{align*}
+            <br><br><strong>Step 1: Add a new start variable and set it to the original start variable</strong>
+            \begin{align*}
+                S_{0} &\rightarrow S \\
+                S &\rightarrow ASA \mid aB \\
+                A &\rightarrow B \mid S \\
+                B &\rightarrow b \mid  \epsilon
+            \end{align*}
+            <br><br><strong>Step 2: Removing \(\epsilon\)-rules</strong>
+            <ul>
+                <li>1: Identify all \(\epsilon\)-rules that do not involve the start variable</li>
+                <ul>
+                    <li>In this case, we have \(B \rightarrow b \mid \epsilon\)</li>
+                </ul>
+                <li>2: For each occurence of B on the right side of a rule, add a new rule that includes \(\epsilon\) as a choice and remove the \(\epsilon\) from the prior rule</li>
+                First iteration:
+                <ul>
+                    <li>In this case, we have \(A \rightarrow B \mid S\) above \(B \rightarrow b \mid \epsilon\)</li>
+                    <ul>
+                        <li>We'll convert \(B \rightarrow b \mid \epsilon\) to \(B \rightarrow b\)</li>
+                        <li>We'll convert \(A \rightarrow B \mid S\) to \(A \rightarrow B \mid S \mid \epsilon\)</li>
+                    </ul>
+                We should have the following at the end of the first iteration:
+                \begin{align*}
+                    S_{0} &\rightarrow S \\
+                    S &\rightarrow ASA \mid aB \\
+                    A &\rightarrow B \mid S \mid \epsilon \\
+                    B &\rightarrow b
+                \end{align*}
+                </ul>
+                Second iteration:
+                <ul>
+                    <li>Now, we have \(S \rightarrow ASA \mid aB\) above \(A \rightarrow B \mid S \mid \epsilon\)</li>
+                    <ul>
+                        <li>We'll convert \(A \rightarrow B \mid S \mid \epsilon\) to \(A \rightarrow B \mid S\)</li>
+                    </ul>
+                    <li>We have established that \(\epsilon\) is a choice for \(A\) AND a choice for \(B\) from the beginning 
+                        \[
+                            B \rightarrow b \mid \epsilon
+                        \]
+                        and from the end of the first iteration.
+                        \[
+                            A \rightarrow B \mid S \mid \epsilon
+                        \]
+                        To make our final conversion for \(S\) we need to append all possible choices that result from removing instances of \(A\) and \(B\) from \(S\)
+                        \begin{align*}
+                            \text{Combination 1: } S &\rightarrow a \text{ from } S \rightarrow aB\text{ (remove B)}\\ 
+                            \text{Combination 2: } S &\rightarrow AS \text{ from } S \rightarrow ASA \text { (remove single instance of A)}\\
+                            \text{Combination 3: } S &\rightarrow SA \text{ from } S \rightarrow ASA \text{ (remove single instance of A)}\\
+                            \text{Combination 4: } S &\rightarrow S \text{ from } S \rightarrow ASA \text{ (remove all instances of A)}
+                        \end{align*}
+                        Result from combinations:
+                        \begin{align*}
+                            S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA
+                        \end{align*}
+                    </li>
+                    <li>At the end of this second iteration, we should have the following:</li>
+                    \begin{align*}
+                        S_{0} &\rightarrow S \\
+                        S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                        A &\rightarrow B \mid S\\
+                        B &\rightarrow b
+                    \end{align*}
+                    
+                </ul>
+            </ul>
+            <br><br><strong>Step 3: Removing unit rules</strong>
+            <ul>
+                <li>In other words, we need to remove rules that have the form \(A \rightarrow B\)</li>
+                <li>We do so by substituting non-terminal symbols (A, B, S) on the right side of a rule with their corresponding rule.</li>
+                <li>We do this until we have no more "unit rules" (rules with single, non-terminal symbols on the right side!).</li>
+            </ul>
+            First iteration: Remove unit rule S from \(S_{0} \rightarrow S\)
+            <ul>
+                <li>\(S_{0} \rightarrow S\) turns into \(S_{0} \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
+                <li>We should now have the following:
+                    \begin{align*}
+                        S_{0} &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                        S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                        A &\rightarrow B \mid S \\
+                        B &\rightarrow b
+                    \end{align*}
+                </li>
+            </ul>
+            Second iteration: Remove unit rule B from \(A \rightarrow B \mid S\)
+            <ul>
+                <li>\(A \rightarrow B \mid S\) turns into \(A \rightarrow b \mid S\)</li>
+                <li>We should now have the following:</li>
+                \begin{align*}
+                    S_{0} &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid S \\
+                    B &\rightarrow b
+                \end{align*}
+            </ul>
+            Third iteration: Remove unit rule S from \(A \rightarrow b \mid S\)
+            <ul>
+                <li>\(A \rightarrow b \mid S\) turns into \(A \rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA\)</li>
+                <li>We should now have the following:</li>
+                \begin{align*}
+                    S_{0} &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA \\
+                    B &\rightarrow b
+                \end{align*}
+                <li>We now have no more unit rules!</li>
+            </ul>
+           <br><strong>Step 4: Convert remaining rules to <span class="highlight" onclick="openModal('chomskyModal')">proper form</span></strong>
+           <ul>
+            <li>We have the following rules that are not in proper form:</li>
+            <ul>
+                <li> \(S_{0} \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
+                <li> \(S \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
+                <li> \(A \rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA\)</li>
+            </ul>
+            <li>1. For each terminal symbol \(u_{i}\) that is not solely produced by its corresponding non-terminal U, add the rule \(U_{i} \rightarrow u_{i}\)</li>
+            <ul>
+                <li>In this case, we have \(a\) as a terminal symbol that is not solely produced by a corresponding non-terminal.</li>
+                <li>We can add the following production:</li>
+                <ul>
+                    <li> \(U \rightarrow a\)</li>
+                </ul>
+                <li>We should now have the following:</li>
+                \begin{align*}
+                    S_{0} &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA \\
+                    U &\rightarrow a \\
+                    B &\rightarrow b \\
+                \end{align*}
+            </ul>
+            <li>2. Now, we need to convert triplet non-terminals into proper form</li>
+            <ul>
+                <li>In this case, we have \(ASA\) as a triplet non-terminal that is not in proper form.</li>
+                <li>We can take the first non-terminal in the set and create the following production:</li>
+                <ul>
+                    <li> \(A_{1}\rightarrow SA\) where \(SA\) is the remaining two non-terminals in that set</li>
+                </ul>
+                <li>We should now have the following:</li>
+                \begin{align*}
+                    S_{0} &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    A_{1} &\rightarrow SA \\
+                    U &\rightarrow a \\
+                    B &\rightarrow b \\
+                \end{align*}
+            </ul>
+            <li>3. Substitute/convert all remaining rules to proper form</li>
+            <ul>
+                <li>As listed above, we now have the following rules in proper form:</li>
+                \begin{align*}
+                    S_{0} &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    A_{1} &\rightarrow SA \\
+                    U &\rightarrow a \\
+                    B &\rightarrow b \\
+                \end{align*}
+            </ul>
+           </ul>
         </p>
         <p>
-            <strong>Problem 3: How do we construct a <span class="highlight" onclick="openModal('pushdownModal')">pushdown automaton</span> from a CFG?</strong>
+            <strong>Problem 3: How do we construct a <span class="highlight" onclick="openModal('pushdownModal')">pushdown automaton</span> from the following CFL:</strong>
+            \[
+                \{a^ib^jc^k \mid i, j, k \geq 0\ \text{ and } i = j \text{ or } j = k\}
+            \]
         </p>
         <p>
-            <strong>Problem 4: How do we show that a PDFA recognizes CFGs (Context-Free Languages)</strong>
+            <strong>Problem 4: How do we show that a PDFA recognizes the following CFL: </strong>
 
         </p>
         <p>
@@ -147,6 +322,45 @@
             <strong>Problem 6: How do we apply the pumping lemma to CFGs? (Consider for Homework III)</strong>
         </p>
 
+        <div id="chomskyModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('chomskyModal')">&times;</span>
+                <h2>Theorem 2.9: Any Any CFL is generated by a CFG in Chomsky Normal Form</h2>
+                Overall:
+                <ul>
+                    <li>Formally defines rules for converting CFG to Chomsky Normal Form</li>
+                    <ul>
+                        <li>Step 1: Add a new start variable and set it to the original start variable</li>
+                        <li>Step 2: Remove \(\epsilon\)-rules</li>
+                        <li>Step 3: Remove unit rules</li>
+                        <li>Step 4: Convert remaining rules to proper form</li>
+                    </ul>
+                    <li>In the end, we should have either:</li>
+                    <uL>
+                        <li> \(A \rightarrow BC\) (B and C are non-terminals).</li>
+                        <li> \(A \rightarrow a\) (a is a terminal)</li>
+                        <li> WE CANNOT HAVE \(A \rightarrow \epsilon\) NOR \(A \rightarrow B\) (B is a non-terminal)</li>
+                    </uL>
+                </ul>
+                How to apply step 4 (conversion to proper form):
+                <ul>
+                    <li>In the end, we will still have rules that are not in proper form</li>
+                    <li>To fix this, we can add the following rules for each rule that is not in proper form:</li>
+                    <ul>
+                        <li>Set a new non-terminal \(U\) and create the following production (how symbols can be replaced; LHS and RHS):</li>
+                        <ul>
+                            <li> \(U \rightarrow u_{i}\) where \(u_{i}\) is a terminal that isn't produced by its corresponding non-terminal</li>
+                        </ul>
+                        <li>Take the first non-terminal in a set of more than 2 non-terminals and create the following production:</li>
+                        <ul>
+                            <li>For instance, if we have \(U \rightarrow UVU\)</li>
+                            <li>turn it into \(U_{i} \rightarrow VU\) where VU are the remaining two non-terminals from that set</li>
+                        </ul>
+                        <li>Repeat until all rules are in proper form</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
         <div id="pushdownModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('pushdownModal')">&times;</span>

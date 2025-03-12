@@ -105,40 +105,65 @@
         .sublist {
             display: none;
         }
+        .center {
+            text-align: center;
+        }
     </style>
-<!--
-DFAs NFAs PDAs
-- restricted memory
 
-Turing machines
-- unrestricted memory
-- input/output in tape format
-- produce other forms of output
-- can move lbackwards! 
-- accept/reject (halting) states are final
-- not guaranteed to halt since it can move freely; can loop infinitely - Accept, reject or hang/loop/fail to halt
-- 
-Both
-- decide languages
-- transition based on current state and tape symbol at current position (like DFA)
--->
 </head>
     <body>
+    <!--Center the content-->
+    <div class="center">
+        <h3>Decidability</h3>
+    </div>
     <p>
-        <strong>Problem 1: Break down the following slide on configurations and transitions of a turing machine: </strong>
+        <strong>Problem 1: What constitutes a decidable problem? </strong>
     </p>
     <p>
-        <strong>Problem 2: Break down the summary definition, and turing acceeptance of a turing machine. </strong>
+        <strong>Problem 2: Is the following decidable? How would I demonstrate what it's trying to prove?
+            \[ 
+                EQ_{DFA} = \{ \langle D ,E \rangle \mid D \text{ and } E \text{ are DFAs and } L(D) = L(E)\}
+            \]
+        </strong>
     </p>
     <p>
-        <strong>Problem 3: Turing machine-Language Conditionals</strong>
+        <strong>Problem 3: How can We Determine Decidability of a CFL? Why would Emptiness of a CFL not be decidable, whereas the emptiness of a Regular Language is?</strong>
+    </p>
+    <div class="center">
+        <h3>Digression to Infinity</h3>
+    </div>
+    <p>
+        <strong>Problem 4: What is a correspondance and how do we determine if two or more sets have a correspondance between them?</strong>
+        <br><br><strong></strong>Information to know before answering: <span class="highlight">Types of Infinite sets and Properties of Functions</span></strong>
     </p>
     <p>
-        <strong>Problem 4: Break down each component of the church-turing thesis? What does the thesis state?</strong>
-        <br><br>Formal Description
-        <br><br>Quasi-Formal implementation Descriptions
-        <br><br>Algorithmic high-level Description
-        <br><br>Church-Turing Thesis Statement
+        <strong>Problem 5: What is a countably infinite set? What makes it countable?</strong>
+    </p>
+    <div class="center">
+        <h3>Unrecognizable Languages</h3>
+    </div>
+    <p>
+        <strong>Problem 6: What observation can be made about turing machines that implies the existence of unrecognizable languages?</strong>
+    </p>
+    <p>
+        <strong>Problem 7: Break down the following acceptance problem for the following turing machine:
+        \[
+            A_{TM} = \{\langle M, s \rangle \mid M \text{ is a turing machine that accepts } s\}
+        \] </strong>
+    </p>
+    <div class="center">
+        <h3>Reduction</h3>
+    </div>
+    <p>
+        <strong>Problem 8: What is reduction? What are its use-cases when applying decidability and recognizability?</strong>
+    </p>
+    <p>
+        <strong>Problem 9: Break down the Halting Problem for Turing Machines: 
+            \[
+                HALT_{TM} = \{\langle M, s \rangle \mid M \text{ is a turing machine that halts on input } s\}
+            \]
+            How do we demonstrate that if \(HALT_{TM}\) is decidable, then \(A_{TM}\) is decidable as well?
+        </strong>
     </p>
     <script>
         function openModal(modalId) {
