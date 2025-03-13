@@ -302,8 +302,25 @@
         <p>
             <strong>Problem 3: How do we construct a <span class="highlight" onclick="openModal('pushdownModal')">pushdown automaton</span> from the following CFL:</strong>
             \[
-                \{a^ib^jc^k \mid i, j, k \geq 0\ \text{ and } i = j \text{ or } j = k\}
+                \{a^ib^jc^k \mid i, j, k \geq 0\ \text{ and } i = j \text{ or } i = k\}
             \]
+            <br><br><strong>Step 1: Understand the Language</strong>
+            <ul>
+                <li>The language consists of strings that either have an equal amount of \(a\)'s and \(b\)'s, or an equal amount of \(b\)'s and \(c\)'s.</li>
+            </ul>
+            <br><br><strong>Step 2: Determine the Minimum Number of States Needed for the PDA</strong>
+            <ul>
+                <li>Start State \(q_{1}\): initialize PDA</li>
+                <li>Processing a's: \(q_{2}\): we read and push the \(a\)'s onto the stack and initialize the stack when we transition from \(q_{1} \text{ to } q_{2}\)</li>
+                <li>After reading all a's, we'll have two possibilities: there is either a string with an equal amount of \(a\)'s and \(b\)'s, or there is a string with an equal amount of \(b\)'s and \(c\)'s</li>
+                <ul>
+                    <li>the first possibility is \(i=j\), so we need to transition to a state that can process \(b\)'s and pop \(a\) for every \(b\), and then another state to process \(c\)'s and accept the string</li>
+                    <li>the second possibility is \(i=k\), so we need to transition to a state that can process \(b\)'s and do nothing, another state to process \(c\)'s and pop \(a\) for every \(c\), and then another state to accept the string (3 total)</li>
+                </ul>
+                <li>Therefore, we need 7 states to process all possibilities</li>
+            </ul>
+            <br><br><strong>Step 3: Construct the PDA</strong>
+            <img src="pda.png" class="small-img">
         </p>
         <p>
             <strong>Problem 4: How do we show that a PDFA recognizes the following CFL: </strong>
