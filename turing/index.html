@@ -124,22 +124,360 @@ Both
 -->
 </head>
     <body>
+        <p>
+            <strong>Problem 1: What is a turing machine? Break down the formal definition and behaviors of a turing machine, and elaborate on how we can further clarify transitions.</strong>
+            <br><br><strong>What is a Turing Machine?</strong>
+            <ul>
+                <li>A computational model that is similar to a finite automaton with the exception that...</li>
+                <ul>
+                    <li>It has unrestricted and unlimited memory</li>
+                    <li>Its storage mechanism is described as a tape that is infinite in both directions</li>
+                    <li>The input is a finite string that is initially written on the tape</li>
+                    <li>The machine can move the tape left and right and read/write to the tape</li>
+                    <li>The turing machines rejecting and accepting states are final; as soon as it enters one of those states, the computation stops immediately (halts)</li>
+                </ul>
+            </ul>
+            <br><strong>Breaking down the formal definition of a turing machine</strong>
+            <ul>
+                <li>A turing machine is a 7-tuple: \( M = (Q, \Sigma, \Gamma, \delta, q_0, q_{accept}, q_{reject}) \) where \(Q, \sum, \Gamma\) are all finite sets, and...</li>
+                <ul>
+                    <li>\(Q\) is a finite set of states</li>
+                    <li>\(\sum\) is the input alphabet NOT containing the blank symbol \(\sqcup\)</li>
+                    <ul>
+                        <li>The blank symbol, \(\sqcup\), is a symbol that is not in \(\sum\) and is used to indicate the end of the input</li>
+                    </ul>
+                    <li>\(\Gamma\) is the tape alphabet, where \(\sqcup \in \Gamma\) and \(\sum \subseteq \Gamma\)</li>
+                    <ul>
+                        <li>The tape alphabet, \(\Gamma\), includes the blank symbol \(\sqcup\) and the input alphabet \(\sum\)</li>
+                    </ul>
+                    <li>\(\delta : Q \times \Gamma \rightarrow Q \times \Gamma \times \{L, R\}\) is the transition function</li>
+                    <ul>
+                        <li>\(Q \times \Gamma\): set of all possible <span class="highlight" onclick="openModal('configurationsModal')">configurations</span> of the machine</li>
+                        <li>\(Q \times \Gamma \times \{L, R\}\): set of all possible actions of the machine where \(L\) is a move to the left and \(R\) is a move to the right</li>
+                        <li>\(Q \times \Gamma \rightarrow Q \times \Gamma \times \{L, R\}\): The transition function takes a configuration and produces the next configuration depending on where it moves the tape head and what symbol it writes to the tape</li>
+                    </ul>
+                    <li>\(q_0 \in Q\) is the start state</li>
+                    <li>\(q_{accept} \in Q\) is the accept state</li>
+                    <li>\(q_{reject} \in Q\) is the reject state, where \(q_{reject} \neq q_{accept}\)</li>
+                </ul>
+            </ul>
+            <br><strong>Behaviors of a turing machine</strong>
+            <ul>
+                <li>If a turing machine \(M\) tries to move its head to the left off the left-hand end of the tape, the head stays in the same place for that move, despite the transition function indicating \(L\) (left movement)</li>
+                <li>The computation of \(M\) continues until it enters an accepting or rejecting state, at which point it halts. If neitehr occurs, \(M\) loops infinitely</li>
+            </ul>
+            <br><strong>How We Can Clarify Transitions</strong>
+            <ul>
+                <li>We have established prior that our <span class="highlight" onclick="openModal('configurationsModal')">configuration</span> with tape contents \(uv\) in state \(q\) can be represented as 
+                    \[
+                        uqv
+                    \] where \(u\) is the tape content to the left of the head and \(v\) is the tape content to the right of the head
+                </li>
+                <li>We can clarify transitions by letting \(x\) be the last character of the prefix (last symbol to the left of the head)and \(a\) be the first character of the suffix (symbol under the head/currently being read by the machine).</li>  
+                <li>\(x\) and \(a\) represent specific positions in the configuration. We can then refine the configuration as follows:
+                    \[
+                        ux\text{ }q\text{ }av
+                    \] where... </li>
+                    <ul>
+                        <li>\(u\) is the tape content to the left of the head</li>
+                        <li>\(x\) is the last symbol to the left of the head
+                        <li>\(q\) is the current state</li>
+                        <li>\(a\) is the symbol under the head</li>
+                        <li>\(v\) is the tape content to the right of the head</li>
+                    </ul>
+                <li>Using this refined configuration format (\(ux \text{ }q \text{ }av\)), we can clarify the transitions as follows where:</li>
+                <ul>
+                    (\(ux \text{ }q \text{ }av\)) yields...
+                    <li>\(u \text{ }r \text{ }xbv\) if \(\delta(q, a) = (r, b, L)\) (result of moving left)</li>
+                    <ul>
+                        <li>If the machine is in state \(q\) and reads symbol \(a\) on the tape...</li>
+                        <ul>
+                            <li>It changes to new state \(r\)</li>
+                            <li>It writes symbol \(b\) (replacing \(a\)) on the tape at the current position</li>
+                            <li>It moves the tape head one position to the left (L)</li>
+                        </ul>
+                        <li>The new configuration as of result of the transition is \(u \text{ }r \text{ }xbv\) where...</li>
+                        <ul>
+                            <li>The machine is in the new state \(r\)</li>
+                            <li>the head is positioned over the symbol \(x\) (last symbol to the left of the head)</li>
+                            <li>The machine is about to read \(x\)</li>
+                            <li>The symbol \(b\) is to the right of the head (symbol that replaces \(a\))</li>
+                        </ul>
+                    </ul>
+                    <li>\(uxb \text{ }r \text{ }v\) if \(\delta(q, a) = (r, b, R)\) (result of moving right)</li>
+                    <ul>
+                        <li>If the machine is in state \(q\) and reads symbol \(a\) on the tape...</li>
+                        <ul>
+                            <li>It changes to new state \(r\)</li>
+                            <li>It writes symbol \(b\) (replacing \(a\)) on the tape at the current position</li>
+                            <li>It moves the tape head one position to the right (R)</li>
+                        </ul>
+                        <li>The new configuration as of result of the transition is \(uxb \text{ }r \text{ }v\) where...</li>
+                        <ul>
+                            <li>The machine is in the new state \(r\)</li>
+                            <li>The head is now positioned over the first symbol of \(v\) (the rest of the tape content to the right of the head)</li>
+                            <li>The symbol \(b\) is to the left of the head (symbol that replaces \(a\))</li>
+                        </ul>
+                    </ul>
+                </ul>
+            </ul>
+            <br><strong>That was rough, so let's do an example</strong>
+            <ul>
+                <li>Let's apply these transition rules to the string "nurture" on the tape where our machine results in "NURture" with the head positioned over 'U'</li>
+                <ul>
+                    <li>Initial configuration: \(q_0\text{"nurture"}\) (head at the beginning, in start state \(q_0\))</li>
+                    <li>Let's say we have the following transitions:
+                        <ul>
+                            <li>\(\delta(q_0, n) = (q_1, N, R)\) - Read 'n', write 'N', move right</li>
+                            <li>\(\delta(q_1, u) = (q_2, U, R)\) - Read 'u', write 'U', move right</li>
+                            <li>\(\delta(q_2, r) = (q_3, R, L)\) - Read 'r', write 'R', move left</li>
+                        </ul>
+                    </li>
+                    <li>Step 1: Apply \(\delta(q_0, n) = (q_1, N, R)\)
+                        <ul>
+                            <li>Current configuration: \(q_0nurture\)</li>
+                            <li>In our refined transition notation: \(u = \varepsilon\) (empty), \(x = \varepsilon\) (empty), \(q = q_0\), \(a = n\), \(v = urture\) where...</li>
+                            <ul>
+                                <li>\(u\) is the tape content to the left of the head (empty)</li>
+                                <li>\(x\) is the last symbol to the left of the head (empty)</li>
+                                <li>\(q\) is the current state (start state \(q_0\))</li>
+                                <li>\(a\) is the symbol under the head (n)</li>
+                                <li>\(v\) is the tape content to the right of the head (urture)</li>
+                            </ul>
+                            <li>Since we're moving right (R), we get: \(uxb \text{ }r \text{ }v \) where...</li>
+                            <ul>
+                                <li>\(u = \varepsilon\) (tape content to the left of the head excluding the last symbol)</li>
+                                <li>\(x = \varepsilon\) (last symbol to the left of the head)</li>
+                                <li>\(b = N\) (symbol written to the tape)</li>
+                                <li>\(r = q_1\) (new state)</li>
+                                <li>\(v = urture\) (tape content to the right of the head)</li>
+                            </ul>
+                            <li>The machine is now in state \(q_1\), the head is positioned over 'u', and 'n' has been replaced with 'N'</li>
+                        </ul>
+                    </li>
+                    <li>Step 2: Apply \(\delta(q_1, u) = (q_2, U, R)\)
+                        <ul>
+                            <li>Current configuration: \(uxb \text{ }r \text{ }v \) = \(N \text{ }q_1 \text{ }urture\)</li>
+                            <li>In our refined transition notation: \(u = \varepsilon\), \(x = N\), \(q = q_1\), \(a = u\), \(v = rture\) where...</li>
+                            <ul>
+                                <li>\(u\) is the tape content to the left of the head (empty)</li>
+                                <li>\(x = N\) (last symbol to the left of the head)</li>
+                                <li>\(q = q_1\) (current state)</li>
+                                <li>\(a = u\) (symbol under the head)</li>
+                                <li>\(v = rture\) (tape content to the right of the head)</li>
+                            </ul>
+                            <li>Since we're moving right (R), we get: \(uxb \text{ }r \text{ }v \) where...
+                                <ul>
+                                    <li>\(u = \varepsilon\) (tape content to the left of the head excluding the last symbol)</li>
+                                    <li>\(x = N\) (last symbol to the left of the head)</li>
+                                    <li>\(b = U\) (symbol written to the tape)</li>
+                                    <li>\(r = q_2\) (new state)</li>
+                                    <li>\(v = rture\) (tape content to the right of the head)</li>
+                                </ul>
+                            <li>The machine is now in state \(q_2\), the head is positioned over 'r', and 'u' has been replaced with 'U'</li>
+                        </ul>
+                    </li>
+                    <li>Step 3: Apply \(\delta(q_2, r) = (q_3, R, L)\)
+                        <ul>
+                            <li>Current configuration: \(uxb \text{ }r \text{ }v \) = \(NU \text{ }q_2 \text{ }rture\)</li>
+                            <li>In our refined transition notation: \(u = N\), \(x = U\), \(q = q_2\), \(a = r\), \(v = ture\) where...</li>
+                            <ul>
+                                <li>\(u = N\) (content to the left of the head excluding the last symbol)</li>
+                                <li>\(x = U\) (last symbol to the left of the head)</li>
+                                <li>\(q = q_2\) (current state)</li>
+                                <li>\(a = r\) (symbol under the head)</li>
+                                <li>\(v = ture\) (tape content to the right of the head)</li>
+                            </ul>
+                            <li>Since we're moving left (L), we get: \(u \text{ }r \text{ }xbv\) where...</li>
+                            <ul>
+                                <li>\(u = N\) (content to the left of the head excluding the last symbol)</li>
+                                <li>\(r = q_3\) (new state)</li>
+                                <li>\(x = U\) (last symbol to the left of the head)</li>
+                                <li>\(b = R\) (symbol written to the tape)</li>
+                                <li>\(v = ture\) (tape content to the right of the head)</li>
+                            </ul>
+                            <li>The machine is now in state \(q_3\), the head is positioned over 'U', and 'r' has been replaced with 'R'</li>
+                        </ul>
+                    </li>
+                    <li>The tape now contains "NURture" with the head positioned over 'U' 【=◈︿◈=】</li>
+                </ul>
+            </ul>
+        </p>
     <p>
-        <strong>Problem 1: Break down the following slide on configurations and transitions of a turing machine: </strong>
+        <strong>Problem 2: Define the Language of a Turing Machine and Differentiate between Decidability and Recognizability. What Can be Said about Turing-Recognizable and Turing-Decidable Languages?</strong>
+        <br><br><strong>Language of a Turing Machine -</strong>
+        <ul>
+            <li>A language \(L\) is the set of all strings that a turing machine \(M\) accepts</li>
+        </ul>
+        <br><strong>Decidability - </strong>
+        <ul>
+            <li>A turing machine <strong>decides</strong> a language \(L\) if it accepts the strings in it and rejects all the other strings</li>
+            <ul>
+                <li>In other words, a turing machine decides a language if it correctly accepts or rejects each input</li>
+            </ul>
+            <li>A language \(L\) is considered <strong>turing-decidable</strong> if some turing machine decides it</li>
+            <ul>
+                <li>In other words, a language is turing-decidable if there exists a turing machine that can always halt and give the correct answer (accept or reject) for any input</li>
+            </ul>            
+            <li>Overall: 
+            <ul>
+                <li>For strings IN the language, the machine must halt and accept</li>
+                <li>For strings NOT in the language, <span class="highlight">the machine must halt and reject</span>.</li>
+            </ul>
+        </ul>
+        <br><strong>Recognizability - </strong>
+        <ul>
+            <li>A turing machine <strong>recognizes</strong> a language \(L\) if it accepts the strings in it and no others</li>
+            <ul>
+                <li>In other words, a turing machine recognizes a language if it accepts all strings in \(L\) and does not accept any strings not in \(L\) (it may reject them or loop forever)</li>
+            </ul>
+            <li>A language \(L\) is considered <strong>turing-recognizable</strong> if some turing machine recognizes it</li>
+            <ul>
+                <li>In other words, a language is turing-recognizable if there exists a turing machine that halts and accepts all strings in \(L\), and either halts and rejects or loops forever on strings not in \(L\)</li>
+            </ul>
+            <li>Overall: 
+                <ul>
+                    <li>For strings IN the language, the machine must halt and accept</li>
+                    <li>For strings NOT in the language, <span class="highlight">the machine must NOT accept (it can either reject or loop indefinitely)</span></li>
+                </ul>
+        </ul>
+        <br><strong>What Can be Said about Turing-Recognizable and Turing-Decidable Languages -</strong>
+        <ul>
+            <li><strong>Not All Turing-Recognizable Languages are Turing-Decidable</strong></li>
+            <ul>
+                <li>This is because a turing machine that recognizes a language may not always halt on strings not in the language (given that it can loop indefinitely)</li>
+            </ul>
+            <li><strong>All Turing-Decidable Languages are Turing-Recognizable</strong></li>
+            <ul>
+                <li>This is because a turing machine that decides a language must also recognize it (given that it halts on all inputs)</li>
+            </ul>
+        </ul>
     </p>
     <p>
-        <strong>Problem 2: Break down the summary definition, and turing acceeptance of a turing machine. </strong>
-    </p>
-    <p>
-        <strong>Problem 3: Turing machine-Language Conditionals</strong>
-    </p>
+        <strong>Problem 3: Define the following Turing Machine Variants: Enumerator, Multitape TM, and NDTM</strong>
+        <br><br><strong>Enumerator - </strong>
+        <ul>
+            <li>What: A turing machine that enumerates (lists) all strings in a language</li>
+            <ul>
+                <li>In other words, an enumerator generates all strings in a language one by one</li>
+            </ul>
+            <li>How to construct an enumerator: </li>
+            <ul>
+                <li>Given a language \(L\), we can construct an enumerator that generates all strings in \(L\) one by one</li>
+                <li>The enumerator works by:</li>
+                <ul>
+                    <li>Enumerating all possible strings in lexicographic (dictionary) order</li>
+                    <li>For each string, checking if it is in the language \(L\)</li>
+                    <li>If it is, the enumerator halts and accepts the string</li>
+                    <li>If it is not, the enumerator continues to the next string</li>
+                    <li>The enumerator halts when all strings in \(L\) have been generated and checked</li>
+                </ul>            
+            </ul>
+        </ul>
+        <br><strong>Multitape TM - </strong>
+        <ul>
+            <li>What: A turing machine with multiple finite number of tapes, each with its own read-write head where...</li>
+            <ul>
+                <li>the input appears on tape 1, and the other tapes are initially blank</li>
+                <li>On each transition, we read all the tapes at once</li>
+                <li>On each transition, we write to all the tapes at once</li>
+                <li>On each transition, we move left or right on all the tapes at once</li>
+                <li>\(\delta: Q \times \Gamma^k \rightarrow Q \times \Gamma^k \times \{L, R\}^k\) where... </li>
+                <ul>
+                    <li>\(Q\): set of states</li>
+                    <li>\(\Gamma\): tape alphabet</li>
+                    <li>\(k\): number of tapes</li>
+                    <li>\(\{L, R\}^k\): set of possible moves for each tape head (left or right)</li>
+                </ul>
+                <li>We use # as a tape separator symbol</li>
+                <li>We use ȧ (symbol (a, b, c, etc) with a dot above it) to indicate the movement of the head</li>
+            </ul>
+        </ul>
+        <br><strong>NDTM (Nondeterministic Turing Machine) - </strong>
+        <ul>
+            <li>What: A turing machine that can make multiple transitions from a single configuration where...</li>
+            <ul>
+                <li>\(\delta: Q \times \Gamma \rightarrow P(Q \times \Gamma \times \{L, R\})\)</li>
+                <ul>
+                    <li>\(Q\): set of states</li>
+                    <li>\(\Gamma\): tape alphabet</li>
+                    <li>\(P(Q \times \Gamma \times \{L, R\})\): power set of \(Q \times \Gamma \times \{L, R\}\) (set of all possible transitions)</li>
+                </ul>
+                <li>We visit the tree using breadth-first search (level by level) as opposed to depth-first search (following paths to their ends)</li>
+                <ul>
+                    <li>This means that we explore all possible configurations at the current computation step before moving to the next step to avoid spinning indefinitely</li>
+                </ul>
+            </ul>
+            </ul>
+        </p>
     <p>
         <strong>Problem 4: Break down each component of the church-turing thesis? What does the thesis state?</strong>
-        <br><br>Formal Description
-        <br><br>Quasi-Formal implementation Descriptions
-        <br><br>Algorithmic high-level Description
-        <br><br>Church-Turing Thesis Statement
+        <br><br><strong>Formal Description (component 1) -</strong>
+        <ul>
+            <li>The 7-tuple definition of a turing machine</li>
+        </ul>
+        <br><strong>Quasi-Formal implementation Descriptions (component 2) -</strong>
+        <ul>
+            <li><span class="highlight" onclick="openModal('configurationsModal')">Configuration Rules and Types</span> + transition clarifications</li>
+        </ul>
+        <br><strong>Algorithmic high-level Description (component 3) -</strong>
+        <ul>
+            <li>Descriptions of algorithms are equivalent in power to turing machines</li>
+            <ul>
+                <li>In other words, any algorithm can be computed by a turing machine</li>
+                <li>An algorithm is any clear, unambiguous, and finite set of instructions to a computer, each step of which performs only a finite amount of work</li>
+            </ul>
+            <li>It defines the entire way we think about algorithms</li>
+            <ul>
+                <li>Why: turing machines provide formal instructions on how we define algorithms</li>
+            </ul>
+        </ul>
+        <br><strong>Church-Turing Thesis Statement -</strong>
+        <ul>
+            <li>The Church-Turing Thesis tells us that the formal definition, quasi-formal definition, and algorithmic high-level description of algorithms are equivalent in power</li>
+            <ul>
+                <li>In other words, we can use any of the three components to describe a solution to a computational problem, and they all have the same expressive power as a Turing machine</li>
+            </ul>
+        </ul>
     </p>
+    <p>
+        <strong>Problem 5: How do we define a TM \(M\) that decides the following language: 
+            \[
+                A = \{\langle G \rangle \mid G \text{ is a connected undirected graph}\}
+            \]
+        </strong>
+    </p>
+
+    <div id="configurationsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('configurationsModal')">&times;</span>
+            <h2>Definition of Configurations</h2>
+            <ul>
+                <li>A configuration of a turing machine is a snapshot of the machine's current state, the current tape content, and the current head location</li>
+                <li>A configuration is represented as a tuple: \( (q, w, h) \)</li>
+                <ul>
+                    <li>\(q\): current state</li>
+                    <li>\(w\): tape content</li>
+                    <li>\(h\): head location</li>
+                </ul>
+            </ul>
+            <h2>Configuration Rules and Types</h2>
+            <ul>
+                Rules - 
+                <li>A configuration \(C_{1}\) yields a configuration \(C_{2}\) if the machine can legally move from \(C_{1}\) to \(C_{2}\) in one step</li>
+                <li>A configuration with tape contents \(uv\) in state \(q\) with the head over the first symbol of \(v\) can be written as 
+                    \[
+                        uqv
+                    \] where \(u\) is the tape content to the left of the head, \(v\) is the tape content to the right of the head, and \(q\) is the current state
+                </li>
+                Types - 
+                <li>start configuration: \(q_{0}w\) where \(q_{0}\) is the start state and \(w\) is the tape content</li>
+                <li>accepting configuration: any configuration where the state is \(q_{accept}\)</li>
+                <li>rejecting configuration: any configuration where the state is \(q_{reject}\)</li>
+                <li>Accepting and rejecting configurations are halting configurations that do not yield further configurations</li>
+            </ul>
+        </div>
+    </div>
     <script>
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "block";
