@@ -447,11 +447,38 @@ Both
         </ul>
     </p>
     <p>
-        <strong>Problem 5: How do we define a TM \(M\) that decides the following language: 
+        <strong>Problem 5: Define how a TM \(M\) decides the following language: 
             \[
                 A = \{\langle G \rangle \mid G \text{ is a connected undirected graph}\}
             \]
         </strong>
+        <br><strong>Step 0: Understand the Language (Prerequisite/for your understanding)</strong>
+        <ul>
+            <li>Input: \(\langle G \rangle\): the <span class="highlight" onclick="openModal('encodingModal')">encoding</span> of \(G\)</li>
+            <li>Condition: \(G\) is a <span class="highlight" onclick="openModal('graphModal')">connected undirected graph</span></li>
+            <li>If \(G\) is represented as the following graph:</li>
+            <ul>
+                <img src="graph.png" class="small-image">
+                <li>Then \(\langle G \rangle\) would be the set of vertices and edges of the graph</li>
+                <li>In this case, \(\langle G \rangle = \{(1, 2, 3, 4), (1, 2), (2, 3), (3, 1), (1, 4)\}\)</li>
+            </ul>
+        </ul>
+        <br><strong>Step 1: Encoding Verification</strong>
+        <ul>
+            <li>The TM \(M\) will scan the tape to ensure there are two lists and that they are in proper form</li>
+            <ul>
+                <li>The first list will contain a list of distinct decimal numbers (the node list; representing the vertices of the graph)</li>
+                <ul>
+                    <li>It is said to be in proper form if it contains no duplicate numbers</li>
+                </ul>
+                <li>The second list will contain a list of pairs of decimal numbers (the edge list; representing the edges of the graph)</li>
+                <ul>
+                    <li>It is said to be in proper form if every node in the edge list also appears in the node list.</li>
+                </ul>
+            </ul>
+            <li>To verify the encoding for the first list, the TM will do the following:</li>
+            <li>To verify the encoding of the second list, the TM will do the following:</li>
+        </ul>
     </p>
 
     <div id="configurationsModal" class="modal">
@@ -481,6 +508,41 @@ Both
                 <li>accepting configuration: any configuration where the state is \(q_{accept}\)</li>
                 <li>rejecting configuration: any configuration where the state is \(q_{reject}\)</li>
                 <li>Accepting and rejecting configurations are halting configurations that do not yield further configurations</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="encodingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('encodingModal')">&times;</span>
+            <h2>Encoding of an Object</h2>
+            <ul>
+                <li>An object (whether it be a graph, a number, etc) is encoded as a string in order for it to be used as input for a turing machine</li>
+                <li>The encoding of an object is a finite sequence of symbols from a finite alphabet</li>
+                <li>Therefore, if we were to have a Graph A such that \(\langle A \rangle\), we would have to encode A as a set of symbols from a finite alphabet</li>
+                <li>This can be done by creating a set that includes the vertices and edges of the graph</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="graphModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('graphModal')">&times;</span>
+            <h2>Connected Graph</h2>
+            <ul>
+                <li>A connected graph is a graph where every node can be reached from every other node by traveling along the edges of the graph</li>
+            </ul>
+            <h2>Undirected Graph</h2>
+            <ul>
+                <li>An undirected graph is a graph where each edge is bidirectional</li>
+            </ul>
+            <h2>Directed Graph</h2>
+            <ul>
+                <li>A directed graph is a graph where each edge has a single direction, going from one vertex to another</li>
+            </ul>
+            <h2>Disconnected Graph</h2>
+            <ul>
+                <li>A disconnected graph is a graph where you cannot reach every vertex from every other vertex by following the edges</li>
             </ul>
         </div>
     </div>
