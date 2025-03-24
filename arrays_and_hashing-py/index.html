@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays and Hashing- Python</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "Courier New", Courier, monospace;
+            color: #d63384;
+        }
+
+        .comment {
+            color: green;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<h2>Arrays and Hashing (Python)</h2>
+
+<h3>Understanding Runtime (Brief Review)</h3>
+<details>
+    <summary><strong>Big O Notation</strong></summary>
+    <ul>
+        <li>What: A mathematical notation that describes the limiting behavior of a function when the argument tends towards a particular value or infinity.</li>
+        <li>Why: It provides an upper bound on the growth rate of a function, helping to analyze the efficiency of algorithms.</li>
+        <li>Common Notations in order from fastest to slowest:</li>
+        <ul>
+            <li>O(1): Constant time complexity</li>
+            <li>O(log n): Logarithmic time complexity</li>
+            <li>O(n): Linear time complexity</li>
+            <li>O(n log n): Linearithmic time complexity</li>
+            <li>O(n^2): Quadratic time complexity</li>
+            <li>O(n^3): Cubic time complexity</li>
+            <li>O(2^n): Exponential time complexity</li>
+            <li>O(n!): Factorial time complexity</li>
+        </ul>
+    </ul>
+</details>
+
+<h3>Data Structures and their Implementations</h3>
+<details>
+    <summary><strong>Hash Usage</strong></summary>
+    <details>
+        <summary><strong>What are They and When do we use them?</strong></summary>
+        <ul>
+            <li><strong>Hash Sets</strong>: A collection that contains no duplicate elements and makes no guarantees about the order of elements.</li>
+            <li><strong>Hash Maps</strong>: A collection of key-value pairs where each key is unique and makes no guarantees about the order of elements.</li>
+            <li><strong>When to use Hash Sets:</strong></li>
+            <table>
+                <tr>
+                    <th>Use a Hash-Set (set) when the problem asks you to...</th>
+                    <th>Trigger words/phrases</th>
+                    <th>Example Problem Titles</th>
+                </tr>
+                <tr>
+                    <td>Test membership (existence)</td>
+                    <td>"contains", "exists", "present"</td>
+                    <td>Contains Duplicate</td>
+                </tr>
+                <tr>
+                    <td>Enforce uniqueness</td>
+                    <td>"unique", "distinct", "no duplicates"</td>
+                    <td>Valid Anagram</td>
+                </tr>
+                <tr>
+                    <td>Filter/remove duplicates</td>
+                    <td>"remove duplicates", "deduplicate"</td>
+                    <td>Intersection of Two Arrays II</td>
+                </tr>
+                <tr>
+                    <td>Detect cycles</td>
+                    <td>"cycle", "visited", "seen before"</td>
+                    <td>Happy Number</td>
+                </tr>
+                <tr>
+                    <td>Quickly check if something was seen before</td>
+                    <td>"first non-repeating", "first unique"</td>
+                    <td>First Unique Character in a String</td>
+                </tr>
+            </table>
+            <li><strong>When to use Hash Maps:</strong></li>
+            <table>
+                <tr>
+                    <th>Use a Hash-Map (dict) when you need to store a value associated with each key</th>
+                    <th>Trigger words/phrases</th>
+                    <th>Example Problem Titles</th>
+                </tr>
+                <tr>
+                    <td>Count or track frequencies</td>
+                    <td>"count", "frequency", "most frequent", "occurrences"</td>
+                    <td>Top K Frequent Elements</td>
+                </tr>
+                <tr>
+                    <td>Map one thing to another (e.g., value → index)</td>
+                    <td>"index of", "pair sum", "two sum", "map to"</td>
+                    <td>Two Sum</td>
+                </tr>
+                <tr>
+                    <td>Group items by a key</td>
+                    <td>"group by", "categorize", "bucket"</td>
+                    <td>Group Anagrams</td>
+                </tr>
+                <tr>
+                    <td>Cache or memoize results</td>
+                    <td>"cache", "memoization", "lookup"</td>
+                    <td>LRU Cache (extension)</td>
+                </tr>
+                <tr>
+                    <td>Maintain key → data retrieval</td>
+                    <td>"lookup", "get value", "retrieve"</td>
+                    <td>Intersection of Two Arrays II</td>
+                </tr>
+            </table>
+            <li><strong>Overall</strong></li>
+            <table>
+                <tr>
+                    <th>Problem Pattern</th>
+                    <th>Use a Set</th>
+                    <th>Use a Map</th>
+                </tr>
+                <tr>
+                    <td>Check if seen before</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Count Frequencies</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Lookup index by value</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Unique Collection (no duplicates)</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Key-Value Mapping</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+            </table>
+
+        </ul>
+    </details>
+
+    <details>
+        <summary><strong>Hash Set Implementation</strong></summary>
+        <!-- insert code-->
+        <pre><code>  
+    <span class="comment">#initialize an empty hash set</span>
+    s = set()
+
+    <span class="comment">#initialize a hash set with elements</span>
+    s = set([1,2,3,4,5])
+
+    <span class="comment">#Create set from list (automatically removes duplicates)</span>
+    s = set([1,2,3,3]) <span class="comment">#-> {1,2,3}</span>
+
+    <span class="comment">#Add Operation</span>
+    s.add(6) <span class="comment">#s-> {1,2,3,4,5,6}</span>
+
+    <span class="comment">#Remove Operation</span>
+    s.remove(3) <span class="comment">#s-> {1,2,4,5,6}</span>
+
+    <span class="comment">#Discard (safe) Operation</span>
+    s.discard(3) <span class="comment">#-s -> {1,2,4,5,6}</span>
+
+    <span class="comment">#pop operation</span>
+    x = s.pop(5) <span class="comment">#x -> 5, s -> {1,2,4,6}</span>
+    
+    <span class="comment">#search operation</span>
+    if 5 in s || s.__contains__(5):
+        print("5 is in s")
+    else:
+        print("5 is not in s")
+
+    <span class="comment">#length operation</span>
+    len(s) <span class="comment">#-> 4</span>
+
+    <span class="comment">#clear operation</span>
+    s.clear() <span class="comment">#-> {}</span>
+
+    <span class="comment">#copy operation</span>
+    s2 = s.copy() <span class="comment">#s2 -> {1,2,4,6}</span>
+
+    <span class="comment">#union operation</span>
+    s3 = s.union(s2) <span class="comment">#s3 -> {1,2,4,6} (combines both sets and removes duplicates)</span>
+
+    <span class="comment">#intersection operation</span>
+    s4 = s.intersection(s2) <span class="comment">#s4 -> {1,2,4,6} (only elements present in both sets)</span>
+
+    <span class="comment">#difference operation</span>
+    s5 = s.difference(s2) <span class="comment">#s5 -> {1,2,4,6} (elements present in s but not in s2)</span>
+
+    <span class="comment">#symmetric difference operation</span>
+    s6 = s.symmetric_difference(s2) <span class="comment">#s6 -> {1,2,4,6} (elements present in either s or s2 but not both)</span>
+    
+    <span class="comment">#Removing duplicates from a list (key pattern 1)</span>
+    unique = list(set(my_list))
+
+    <span class="comment">#Check if two lists share a common element (key pattern 2)</span>
+    if set(list1) & set(list2):
+        print("Two lists share a common element")
+    else:
+        print("Two lists do not share a common element")
+        </code></pre>
+    </details>
+
+    <details>
+        <summary><strong>Hash Map Implementation</strong></summary>
+        <!-- insert code-->
+        <pre><code>
+    <span class="comment">#initialize an empty hash map</span>
+    d = {} || d = dict()
+
+    <span class="comment">#initialize a hash map with elements</span>
+    d = {'a': 1, 'b': 2, 'c': 3}
+
+
+
+    <span class="comment">#insert operation</span>
+    d['d'] = 4
+
+    <span class="comment">#remove operation</span>
+    d.pop('a')
+
+    <span class="comment">#search operation</span>
+    if 'b' in d:
+        print("b is in d")
+    else:
+        print("b is not in d")
+
+    <span class="comment">#length operation</span>
+    len(d)
+
+    <span class="comment">#clear operation</span>
+    d.clear()
+
+    <span class="comment">#copy operation</span>
+    d2 = d.copy()
+
+    <span class="comment">#frequency count (key pattern 3)</span>
+    chars = ['b','a','n','a','n','a']
+    freq = {}
+    for char in chars:
+        freq[char] = freq.get(char, 0) + 1
+    print(freq)
+
+    <span class="comment">#enumerate operation (key pattern 4)</span>
+    for i, char in enumerate(chars): <span class="comment">#enumerate returns index and value of each element in a list</span>
+        print(i, char)
+        </code></pre>
+    </details>
+    <details>
+        <summary><strong>Time and SpaceComplexity of Hash Sets and Hash Maps</strong></summary>
+        <ul>
+            <li>O(1) time complexity for insertion, deletion, and lookup</li>
+            <li>O(n) time complexity for iteration</li>
+            <li>O(n) space complexity for storing n elements</li>
+            <li>O(b) space complexity for storing b buckets</li>
+            <li>O(n+b) total space complexity</li>
+        </ul>
+    </details>
+</details>
+
+<!-- Hash maps -->
+<details>
+    <summary><strong>maps</strong></summary>
+    <details>
+        <summary><strong>unordered_map</strong></summary>
+        <ul>
+            <li>What: 
+                an <span class="highlight" onclick="openModal('containers')"> <strong>associative container</strong> 
+                </span>
+                that contains a set of key-value pairs in no particular order.
+            </li>
+            <li>How it works: 
+                <span class="highlight" onclick="openModal('internal')"><strong>Internally</strong>
+                </span>
+                , it uses a hash table to store elements, providing... 
+            </li>
+            <li>Time-Complexity</li>
+                <ul>
+                    <li>an average O(1) time complexity for insertion, deletion, and lookup</li>
+                    <li>a worst-case O(n) time complexity for the same operations</li>
+                </ul>
+            <li>Space Complexity</li>
+                <ul>
+                    <li>space to store n elements: O(n)</li>
+                    <li>space to store bucket array: O(b) where b is number of buckets; usually b=2n to maintain load factor.</li>
+                    <li>total space complexity: O(n+b)</li>
+                    <li>With good hash function and load factor close to 1, total space complexity is O(n)</li>
+                </ul>
+    </details>
+    
+    <details>
+        <summary><strong>Implementation of unordered_map</strong></summary>
+        <!-- insert code-->
+    <pre><code>
+    <span class="comment">//compile this file and include everything in std!</span>
+    #include &lt;bits/stdc++.h&gt;
+
+    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
+    using namespace std;
+
+    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
+    <span class="comment">//operate on data</span>
+    class solution {
+        public:
+        <span class="comment">Instantiating unordered_map of type integer</span>
+        unordered_map&lt;int, int&gt; intMap;
+
+        <span class="comment">//function to insert elements into the map</span>
+        void insertElement(int key, int value) {
+            intMap[key] = value;
+        }
+        <span class="comment">//function to check if key exists in the map</span>
+        bool containsKey(int key) {
+            return intMap.find(key) != intMap.end();
+        }
+        <span class="comment">//function to remove an element from a map</span>
+        void removeElement(int key) {
+            intMap.erase(key);
+        }
+        <span class="comment">//function to print all elements in a map</span>
+        void printElements() {
+            for (auto element : intMap) {
+                cout &lt;&lt; element.first &lt;&lt; ": " &lt;&lt; element.second &lt;&lt; endl;
+            }
+        }
+        <span class="comment">//function to print elements in reverse order</span>
+        void printReverse() {
+            for (auto it = intMap.rbegin(); it != intMap.rend(); it++) {
+                cout &lt;&lt; it-&gt;first &lt;&lt; ": " &lt;&lt; it-&gt;second &lt;&lt; endl;
+            }
+        }
+        <span class="comment">//function to find element in map</span>
+        int findElement(int key) {
+            return intMap[key];
+        }
+    }
+    </code></pre>
+    </details>
+    
+    <details>
+        <summary><strong>map</strong></summary>
+        <ul>
+            <li>What: Maps store key-value pairs in a sorted order.</li>
+            <li>Time-Complexity</li>
+                <ul>
+                    <li>Average time-complexity of O(log n) for insertion, deletion, and lookup</li>
+                    <li>Same time complexity for worst run case as well</li>
+                    <li>Why: A map uses a <span class="highlight" onclick="openModal('sb-binary-tree')"> <strong>self-balancing binary search tree</strong> 
+                        </span> to store elements, ensuring they take logarithmic time
+                    </li>
+                </ul>
+            <li>Space Complexity</li>
+                <ul>
+                    <li>space to store elements: O(n)</li>
+                    <li>space for tree structure (the self-balancing binary search tree): O(n)</li>
+                    <li>total space complexity: O(n)</li>
+                </ul>
+    </details>
+
+    <details>
+        <summary><strong>Implementation of map</strong></summary>
+        <!-- insert code-->
+    <pre><code>
+
+    <span class="comment">//compile this file and include everything in std!</span>
+    #include &lt;bits/stdc++.h&gt;
+
+    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
+    using namespace std;
+
+    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
+    <span class="comment">//operate on data</span>
+    class solution {
+        public:
+        <span class="comment">//Instantiating a map of integers</span>
+        map&lt;int, int&gt; intMap;
+
+        <span class="comment">//function to insert elements into the map</span>
+        void insertElement(int key, int value) {
+            intMap[key] = value;
+        }
+        <span class="comment">//function to check if key exists in the map</span>
+        bool containsKey(int key) {
+            return intMap.find(key) != intMap.end();
+        }
+        <span class="comment">//function to remove an element from a map</span>
+        void removeElement(int key) {
+            intMap.erase(key);
+        }
+        <span class="comment">//function to print all elements in a map</span>
+        void printElements() {
+            for (auto element : intMap) {
+                cout &lt;&lt; element.first &lt;&lt; ": " &lt;&lt; element.second &lt;&lt; endl;
+            }
+        }
+        <span class="comment">//function to print elements in reverse order</span>
+        void printReverse() {
+            for (auto it = intMap.rbegin(); it != intMap.rend(); it++) {
+                cout &lt;&lt; it-&gt;first &lt;&lt; ": " &lt;&lt; it-&gt;second &lt;&lt; endl;
+            }
+        }
+        <span class="comment">//function to find element in map</span>
+        int findElement(int key) {
+            return intMap[key];
+        }
+    }
+    </code></pre>   
+    </details>
+</details>
+
+<!-- Arrays -->
+<details>
+    <summary><strong>Arrays</strong></summary>
+    <details>
+        <summary><strong>Arrays Explained</strong></summary>
+        <ul>
+            <li>What: Arrays are a collection of elements stored in contiguous memory locations (stored in adjacent memory addresses without gaps between them; allows for efficient access/manipulation of elements).</li>
+            <li>Time-Complexity</li>
+                <ul>
+                    <li>O(1) time complexity for accessing elements by index</li>
+                    <li>O(n) time complexity for insertion and deletion at arbitrary positions</li>
+                </ul>
+            <li>Space Complexity</li>
+                <ul>
+                    <li>Space to store n elements: O(n)</li>
+                </ul>
+        </ul>
+    </details>
+    
+    <details>
+        <summary><strong>Implementation of Arrays</strong></summary>
+    <!-- insert code-->
+    <pre><code>
+        
+    <span class="comment">//compile this file and include everything in std!</span>
+    #include &lt;bits/stdc++.h&gt;
+
+    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
+    using namespace std;
+
+    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
+    <span class="comment">//operate on data</span>
+    class solution {
+        public:
+        <span class="comment">//Instantiating an array of integers</span>
+        vector&lt;int&gt; intArray;
+
+        <span class="comment">//function to insert elements into the array</span>
+        void insertElement(int element) {
+            intArray.push_back(element);
+        }
+        
+        <span class="comment">//function to check if element exists in the array</span>
+        bool containsElement(int element) {
+            return find(intArray.begin(), intArray.end(), element) != intArray.end();
+        }
+        
+        <span class="comment">//function to remove an element from an array</span>
+        void removeElement(int element) {
+            intArray.erase(remove(intArray.begin(), intArray.end(), element), intArray.end());
+        }
+
+        <span class="comment">//function to print all elements in an array</span>
+        void printElements() {
+            for (auto element : intArray) {
+                cout &lt;&lt; element &lt;&lt; " ";
+            }
+            cout &lt;&lt; endl;
+        }
+
+        <span class="comment">//function to print elements in reverse order</span>
+        void printReverse() {
+            for (auto it = intArray.rbegin(); it != intArray.rend(); it++) {
+                cout &lt;&lt; *it &lt;&lt; " ";
+            }
+            cout &lt;&lt; endl;
+        }
+
+        <span class="comment">//function to find element in array</span>
+        int findElement(int element) {
+            auto it = find(intArray.begin(), intArray.end(), element);
+            if (it != intArray.end()) {
+                return *it;
+            }
+            return -1;
+        }
+    }
+    </code></pre>
+    </details>
+</details>
+
+<!-- Vectors -->
+<details>
+    <summary><strong>Vectors</strong></summary>
+    <details>
+        <summary><strong>Vectors Explained</strong></summary>
+        <ul>
+            <li>What: Vectors are dynamic arrays that can grow and shrink in size.</li>
+            <li>Time-Complexity</li>
+                <ul>
+                    <li>O(1) time complexity for accessing elements by index</li>
+                    <li>O(n) time complexity for insertion and deletion at arbitrary positions (any index in vector, including beginning, middle, and end).  </li>
+                </ul>
+            <li>Space Complexity</li>
+                <ul>
+                    <li>Space to store n elements: O(n)</li>
+                </ul>
+        </ul>
+    </details>
+    
+    <details>
+        <summary><strong>Implementation of Vectors</strong></summary>
+    <!-- insert code-->
+    <pre><code>
+        
+    <span class="comment">//compile this file and include everything in std!</span>
+    #include &lt;bits/stdc++.h&gt;
+
+    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
+    using namespace std;
+
+    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
+    <span class="comment">//operate on data</span>
+    class solution {
+        public:
+        <span class="comment">//Instantiating a vector of integers</span>
+        vector&lt;int&gt; intVector;
+
+        <span class="comment">//function to insert elements into the vector</span>
+        void insertElement(int element) {
+            intVector.push_back(element);
+        }
+        
+        <span class="comment">//function to check if element exists in the vector</span>
+        bool containsElement(int element) {
+            return find(intVector.begin(), intVector.end(), element) != intVector.end();
+        }
+        
+        <span class="comment">//function to remove an element from a vector</span>
+        void removeElement(int element) {
+            intVector.erase(remove(intVector.begin(), intVector.end(), element), intVector.end());
+        }
+
+        <span class="comment">//function to print all elements in a vector</span>
+        void printElements() {
+            for (auto element : intVector) {
+                cout &lt;&lt; element &lt;&lt; " ";
+            }
+            cout &lt;&lt; endl;
+        }
+        <span class="comment">//function to print elements in reverse order</span>
+        void printReverse() {
+            for (auto it = intVector.rbegin(); it != intVector.rend(); it++) {
+                cout &lt;&lt; *it &lt;&lt; " ";
+            }
+            cout &lt;&lt; endl;
+        }
+
+        <span class="comment">//function to find element in vector</span>
+        int findElement(int element) {
+            auto it = find(intVector.begin(), intVector.end(), element);
+            if (it != intVector.end()) {
+                return *it;
+            }
+            return -1;
+        }
+
+        <span class="comment">//function to sort elements in vector</span>
+        void sortElements() {
+            sort(intVector.begin(), intVector.end());
+        }
+
+        <span class="comment">//function to reverse elements in vector</span>
+        void reverseElements() {
+            reverse(intVector.begin(), intVector.end());
+        }
+
+        <span class="comment">//function to get the size of the vector</span>
+        int getSize() {
+            return intVector.size();
+        }
+
+        <span class="comment">//function to clear all elements in the vector</span>
+        void clearElements() {
+            intVector.clear();
+        }
+
+        <span class="comment">//function to check if vector is empty</span>
+        bool isEmpty() {
+            return intVector.empty();
+        }
+
+        <span class="comment">//function to find element in vector</span>
+        int findElement(int element) {
+            auto it = find(intVector.begin(), intVector.end(), element);
+            if (it != intVector.end()) {
+                return *it;
+            }
+            return -1;
+        }
+    }
+    </code></pre>
+    </details>
+</details>
+<details>
+    <summary><strong>Worked out Leetcode Solutions</strong></summary>
+    <details>
+        <summary><strong>Contains Duplicate</strong></summary>
+        <pre><code>
+        #include &lt;bits/stdc++.h&gt; 
+        using namespace std; 
+        
+        class Solution {
+        public:
+            bool hasDuplicate(vector &lt;int&gt; nums) {
+                <span class="comment">//initialize hash set</span>
+                unordered_set&lt;int&gt; set; 
+        
+                <span class="comment">//iterate through nums</span>
+                for (int i = 0; i < nums.size(); i++) 
+                {
+                    <span class="comment">//FIRST: CHECK IF value in hash set</span>
+                    <span class="comment">//set.find(nums[i]) != set.end()</span>
+                    <span class="comment">/*
+                    if element is found, find() returns iterator pointing to that element
+                    If element is not found, it returns set.end()
+        
+                    set.end(): represents invalid position; does not point to actual element in container.
+                        - used to return boolean for set.find() 
+                    */</span>
+                    if (set.find(nums[i]) != set.end())
+                    {
+                        return true; 
+                    }
+        
+                    <span class="comment">//THEN after checking, append it to set</span>
+                    set.insert(nums[i]);
+                }
+                return false; 
+            }
+        };
+        </pre></code>
+    </details>
+    
+    <details>
+        <summary><strong>Valid Anagram</strong></summary>
+        <pre><code>
+        #include &lt;bits/stdc++.h&gt;
+
+        using namespace std;
+        
+        class Solution {
+        public:
+            bool isAnagram(string s, string t) {
+            <span class="comment">//base-case: check if strings are the same length. If not, they can't be anagrams</span>
+            if (s.length() != t.length())
+            {
+                return false;
+            }
+        
+            <span class="comment">//instantiate unordered map</span>
+            <span class="comment">//key: char (since we're iterating char c: s)</span>
+            <span class="comment">//value: int -> frequency</span>
+            unordered_map&lt;char, int&gt; charCount; 
+        
+            <span class="comment">//count frequency of each character in string s</span>
+            for (char c : s)
+            {
+                charCount[c]++; 
+            }
+        
+            <span class="comment">//iterate through each character in string t</span>
+            for (char c : t)
+            {
+                if (charCount.find(c) != charCount.end())
+                {
+                    <span class="comment">//if character (key) is in the unordered_map, decrement (value) by 1</span>
+                    charCount[c]--;
+                    <span class="comment">//if (value) goes to 0 for character (key), remove character (key) from the map</span>
+                    if (charCount[c] == 0)
+                    {
+                        charCount.erase(c);
+                    }
+                }
+                <span class="comment">//character (key) is not in the map</span>
+                else
+                {
+                    return false;
+                }
+                
+            }
+        
+            <span class="comment">//if all characters (keys) are found, map should return true if empty.</span>
+            return (charCount.empty());
+            }
+        };
+    </code></pre>
+    </details>
+
+    <details>
+    <summary><strong>Two Sum</strong></summary>
+    <pre><code>
+    #include &lt;bits/stdc++.h&gt;
+
+    using namespace std;
+    
+    class Solution {
+    public:
+        vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
+            <span class="comment">//instantiate an ordered map</span>
+            <span class="comment">//stores index and value</span>
+            map&lt;int, int&gt; intMap; 
+    
+            <span class="comment">//initialize vector to hold pair</span>
+            vector&lt;int&gt; pair; 
+    
+            <span class="comment">//iterate through each value in nums</span>
+            for (int i = 0; i < nums.size(); i++)
+            {
+                int complement = target - nums[i];
+    
+                <span class="comment">//check if complement (key) exists in the map</span>
+                if (intMap.find(complement) != intMap.end())
+                {
+                    <span class="comment">//first value in pair</span>
+                    <span class="comment">//intMap[complement]: returns index (value) where key(complement) is</span>
+                    pair.push_back(intMap[complement]); 
+                    
+                    <span class="comment">//second value in pair</span>
+                    <span class="comment">//returns index of nums[i]</span>
+                    pair.push_back(i);
+                    break;
+                }
+    
+                <span class="comment">//key: the number (what we're searching for)</span>
+                <span class="comment">//value: the index (what we want in our result)</span>
+                intMap[nums[i]] = i; 
+            }
+            return pair;
+        }
+    };
+    </pre></code>
+    </details>
+    
+</details>
+
+
+<!-- modal1: containers (unordered_sets explained) -->
+<div id="containers" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('containers')">&times;</span>
+      <ul>
+        <li>Containers: data structure that stores and organizes a collection of elements.</li>
+        <ul>
+            <li>They are a part of C++ Standard library</li>
+            <li>They handle storage, retrieval, and management of elements</li>
+            <li><strong>Algorithms and iterators operate on containers, but containers themselves dont apply algorithms/iterators.</strong></li>
+        </ul>
+        <li>Associative Containers: Types of containers that <strong>store elements in a way that allows for fast retrieval using keys (values used to uniquely identify elements in the container)</strong></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- modal2: internal (unordered_sets explained) -->
+<div id="internal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('internal')">&times;</span>
+      <h2>Internal workings of unordered_sets</h2>
+      <ul>
+        <li><strong>Hash Function</strong></li>
+        <ul>
+            <li>Hash function takes an input (key) and returns an integer (hash code)</li>
+            <li>Hash code is used to determine the index in a (bucket) array where the element will be stored.</li>
+            <li>Hash functions contain a load factor (measure of how full the hash table is). 
+            <ul>
+                <li>It's computed by \(\frac{n}{b}\) where n is the number of elements in the table and b is the number of buckets in the table.</li>
+                <li>Typical Threshold is 0.75. When threshold is exceeded, table is resized: # buckets are resized and existing elements are rehashed into new buckets.</li>
+            </ul>
+        </ul>
+        <li><strong>buckets</strong></li>
+        <ul>
+            <li>Hash table consists of an array of buckets</li>
+            <li>Each bucket can store multiple elements in case of hash collisions (when different keys produce the same hash code)</li>
+        </ul>
+        <li><strong>Collision Resolution</strong></li>
+        <ul>
+            <li><strong>Chaining</strong>: Each bucket contains a linked list of elements that hash to the same index</li>
+            <li><strong>Open Addressing</strong>: Elements are stored directly in the array, and collisions are resolved by probing (finding another empty slot)</li>
+        </ul>
+      </ul>
+    </div>
+</div>
+
+<!-- modal3: sb-binary-tree -->
+<div id="sb-binary-tree" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('sb-binary-tree')">&times;</span>
+      <h2>Self-Balancing Binary Search Tree</h2>
+      <ul>
+        <li>What: A binary search tree that automatically keeps the tree balanced after insertions and deletions</li>
+        <li>How it works: 
+            <ul>
+                <li>It uses rotations to keep the tree balanced</li>
+                <li>Rotations are performed when the tree becomes unbalanced (i.e., when the height of the left and right subtrees differ by more than 1)</li>
+            </ul>
+        </li>
+        <li>Why it's useful: 
+            <ul>
+                <li>Ensures that the tree remains balanced, which guarantees logarithmic time complexity for insertion, deletion, and lookup operations</li>
+                <li>Without balancing, the tree could degenerate into a linked list, leading to linear time complexity (O(n))for these operations</li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+
+
+<script>
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = "block";
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
+
+// Close the modal when clicking outside of it
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
+
