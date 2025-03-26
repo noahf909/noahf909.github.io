@@ -56,7 +56,7 @@
         }
         code {
             font-family: "Courier New", Courier, monospace;
-            color: #d63384;
+            color: black;
         }
 
         .comment {
@@ -364,10 +364,9 @@
     <span class="comment">#enumerate operation (key pattern 4)</span>
     for i, char in enumerate(chars): <span class="comment">#enumerate returns index and value of each element in a list</span>
         print(i, char)
-        </code></pre>
     </details>
     <details>
-        <summary><strong>Time and SpaceComplexity of Hash Sets and Hash Maps</strong></summary>
+        <summary><strong>Time and Space Complexity of Hash Sets and Hash Maps</strong></summary>
         <ul>
             <li>O(1) time complexity for insertion, deletion, and lookup</li>
             <li>O(n) time complexity for iteration</li>
@@ -378,560 +377,333 @@
     </details>
 </details>
 
-<!-- Hash maps -->
-<details>
-    <summary><strong>maps</strong></summary>
-    <details>
-        <summary><strong>unordered_map</strong></summary>
-        <ul>
-            <li>What: 
-                an <span class="highlight" onclick="openModal('containers')"> <strong>associative container</strong> 
-                </span>
-                that contains a set of key-value pairs in no particular order.
-            </li>
-            <li>How it works: 
-                <span class="highlight" onclick="openModal('internal')"><strong>Internally</strong>
-                </span>
-                , it uses a hash table to store elements, providing... 
-            </li>
-            <li>Time-Complexity</li>
-                <ul>
-                    <li>an average O(1) time complexity for insertion, deletion, and lookup</li>
-                    <li>a worst-case O(n) time complexity for the same operations</li>
-                </ul>
-            <li>Space Complexity</li>
-                <ul>
-                    <li>space to store n elements: O(n)</li>
-                    <li>space to store bucket array: O(b) where b is number of buckets; usually b=2n to maintain load factor.</li>
-                    <li>total space complexity: O(n+b)</li>
-                    <li>With good hash function and load factor close to 1, total space complexity is O(n)</li>
-                </ul>
-    </details>
-    
-    <details>
-        <summary><strong>Implementation of unordered_map</strong></summary>
-        <!-- insert code-->
-    <pre><code>
-    <span class="comment">//compile this file and include everything in std!</span>
-    #include &lt;bits/stdc++.h&gt;
-
-    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
-    using namespace std;
-
-    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
-    <span class="comment">//operate on data</span>
-    class solution {
-        public:
-        <span class="comment">Instantiating unordered_map of type integer</span>
-        unordered_map&lt;int, int&gt; intMap;
-
-        <span class="comment">//function to insert elements into the map</span>
-        void insertElement(int key, int value) {
-            intMap[key] = value;
-        }
-        <span class="comment">//function to check if key exists in the map</span>
-        bool containsKey(int key) {
-            return intMap.find(key) != intMap.end();
-        }
-        <span class="comment">//function to remove an element from a map</span>
-        void removeElement(int key) {
-            intMap.erase(key);
-        }
-        <span class="comment">//function to print all elements in a map</span>
-        void printElements() {
-            for (auto element : intMap) {
-                cout &lt;&lt; element.first &lt;&lt; ": " &lt;&lt; element.second &lt;&lt; endl;
-            }
-        }
-        <span class="comment">//function to print elements in reverse order</span>
-        void printReverse() {
-            for (auto it = intMap.rbegin(); it != intMap.rend(); it++) {
-                cout &lt;&lt; it-&gt;first &lt;&lt; ": " &lt;&lt; it-&gt;second &lt;&lt; endl;
-            }
-        }
-        <span class="comment">//function to find element in map</span>
-        int findElement(int key) {
-            return intMap[key];
-        }
-    }
-    </code></pre>
-    </details>
-    
-    <details>
-        <summary><strong>map</strong></summary>
-        <ul>
-            <li>What: Maps store key-value pairs in a sorted order.</li>
-            <li>Time-Complexity</li>
-                <ul>
-                    <li>Average time-complexity of O(log n) for insertion, deletion, and lookup</li>
-                    <li>Same time complexity for worst run case as well</li>
-                    <li>Why: A map uses a <span class="highlight" onclick="openModal('sb-binary-tree')"> <strong>self-balancing binary search tree</strong> 
-                        </span> to store elements, ensuring they take logarithmic time
-                    </li>
-                </ul>
-            <li>Space Complexity</li>
-                <ul>
-                    <li>space to store elements: O(n)</li>
-                    <li>space for tree structure (the self-balancing binary search tree): O(n)</li>
-                    <li>total space complexity: O(n)</li>
-                </ul>
-    </details>
-
-    <details>
-        <summary><strong>Implementation of map</strong></summary>
-        <!-- insert code-->
-    <pre><code>
-
-    <span class="comment">//compile this file and include everything in std!</span>
-    #include &lt;bits/stdc++.h&gt;
-
-    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
-    using namespace std;
-
-    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
-    <span class="comment">//operate on data</span>
-    class solution {
-        public:
-        <span class="comment">//Instantiating a map of integers</span>
-        map&lt;int, int&gt; intMap;
-
-        <span class="comment">//function to insert elements into the map</span>
-        void insertElement(int key, int value) {
-            intMap[key] = value;
-        }
-        <span class="comment">//function to check if key exists in the map</span>
-        bool containsKey(int key) {
-            return intMap.find(key) != intMap.end();
-        }
-        <span class="comment">//function to remove an element from a map</span>
-        void removeElement(int key) {
-            intMap.erase(key);
-        }
-        <span class="comment">//function to print all elements in a map</span>
-        void printElements() {
-            for (auto element : intMap) {
-                cout &lt;&lt; element.first &lt;&lt; ": " &lt;&lt; element.second &lt;&lt; endl;
-            }
-        }
-        <span class="comment">//function to print elements in reverse order</span>
-        void printReverse() {
-            for (auto it = intMap.rbegin(); it != intMap.rend(); it++) {
-                cout &lt;&lt; it-&gt;first &lt;&lt; ": " &lt;&lt; it-&gt;second &lt;&lt; endl;
-            }
-        }
-        <span class="comment">//function to find element in map</span>
-        int findElement(int key) {
-            return intMap[key];
-        }
-    }
-    </code></pre>   
-    </details>
-</details>
-
 <!-- Arrays -->
 <details>
-    <summary><strong>Arrays</strong></summary>
+    <summary><strong>Arrays (Static and Dynamic)</strong></summary>
     <details>
-        <summary><strong>Arrays Explained</strong></summary>
+        <summary><strong>How do they differ? and When do we use them?</strong></summary>
         <ul>
-            <li>What: Arrays are a collection of elements stored in contiguous memory locations (stored in adjacent memory addresses without gaps between them; allows for efficient access/manipulation of elements).</li>
-            <li>Time-Complexity</li>
+            <li>Static Arrays: </li>
                 <ul>
-                    <li>O(1) time complexity for accessing elements by index</li>
-                    <li>O(n) time complexity for insertion and deletion at arbitrary positions</li>
+                    <li>Fixed size</li>
+                    <li>Elements are stored in contiguous memory locations</li>
+                    <li>Access elements by index in constant time O(1)</li> 
                 </ul>
-            <li>Space Complexity</li>
+            <li>When to use static arrays:</li>
+            <table>
+                <tr>
+                    <th>Use a static array when you need:</th>
+                    <th>Trigger words/phrases</th>
+                </tr>
+                <tr>
+                    <td>Fixed size</td>
+                    <td>"fixed size", "static size", "limited capacity"</td
+                </tr>
+                <tr>
+                    <td>Predictable memory allocation</td>
+                    <td>"predictable memory allocation", "fixed memory allocation"</td>
+                </tr>
+                <tr>
+                    <td>Memory efficiency</td> 
+                    <td>"memory efficiency", "minimal memory usage"</td>
+                </tr>
+            </table>
+            <li>Dynamic Arrays: </li>
                 <ul>
-                    <li>Space to store n elements: O(n)</li>
+                    <li>Variable size</li>
+                    <li>Elements are stored in contiguous memory locations</li>
+                    <li>Access elements by index in constant time O(1)</li>
                 </ul>
+            <li>When to use dynamic arrays:</li>
+            <table>
+                <tr>
+                    <th>Use a dynamic array when you need:</th>
+                    <th>Trigger words/phrases</th>
+                </tr>
+                <tr>
+                    <td>Flexible size</td>
+                    <td>"flexible size", "dynamic size", "variable capacity"</td>
+                </tr>
+                <tr>
+                    <td>No memory wastage</td>
+                    <td>"no memory wastage", "efficient memory usage"</td>
+                </tr>
+                <tr>
+                    <td>Dynamic memory allocation</td>
+                    <td>"dynamic memory allocation", "flexible memory allocation"</td>
+                </tr>
+            </table>
         </ul>
     </details>
     
     <details>
-        <summary><strong>Implementation of Arrays</strong></summary>
+        <summary><strong>Implementation of Static Arrays</strong></summary>
+        <!-- insert code-->
+    <pre><code>
+    <span class="comment">#initialize an empty static array</span>
+    static_array = [0] * 5
+
+    <span class="comment">#initialize a static array with elements</span>
+    static_array = [1, 2, 3, 4, 5]
+    
+    <span class="comment">#access elements by index</span>
+    print(static_array[0])
+
+    <span class="comment">#modify elements by index</span>
+    static_array[0] = 0
+
+    <span class="comment">#length of array</span>
+    len(static_array)
+
+    <span class="comment">#iterate through array</span>
+    for i in static_array:
+        print(i)
+    
+    <span class="comment">#reverse array</span>
+    static_array.reverse()
+
+    <span class="comment">#sort array</span>
+    static_array.sort()
+
+    <span class="comment">#clear array</span>
+    static_array.clear()
+
+    <span class="comment">#check if array is empty</span>
+    if not static_array:
+        print("Array is empty")
+    
+    <span class="comment">#check if array is full</span>
+    if len(static_array) == len(static_array):
+        print("Array is full")
+    
+    <span class="comment">#insert element at index</span>
+    static_array.insert(0, 0)
+
+    <span class="comment">#remove element at index</span>
+    static_array.pop(0)
+
+    <span class="comment">#remove element by value</span>
+    static_array.remove(0)
+        
+        
+    </code></pre>
+    </details>
+    
+    <details>
+        <summary><strong>Implementation of Dynamic Arrays</strong></summary>
+        <!-- insert code-->
+        <pre><code>
+        <span class="comment">#initialize an empty dynamic array</span>
+        dynamic_array = []
+
+        <span class="comment">#initialize a dynamic array with elements</span>
+        dynamic_array = [1, 2, 3, 4, 5]
+        
+        <span class="comment">#access elements by index</span>
+        print(dynamic_array[0])
+
+        <span class="comment">#modify elements by index</span>
+        dynamic_array[0] = 0
+
+        <span class="comment">#length of array</span>
+        len(dynamic_array)
+
+        <span class="comment">#iterate through array</span>
+        for i in dynamic_array:
+            print(i)
+
+        <span class="comment">#append element to array</span>
+        dynamic_array.append(6) <span class="comment">#-> [1, 2, 3, 4, 5, 6]</span>
+
+        <span class="comment">#insert element at index</span>
+        dynamic_array.insert(0, 0)
+
+        <span class="comment">#remove element at index</span>
+        dynamic_array.pop(0)
+
+        <span class="comment">#remove element by value</span>
+        dynamic_array.remove(0)
+
+        <span class="comment">#resize array</span>
+        dynamic_array.resize(10) <span class="comment">#-> [1, 2, 3, 4, 5, 6, 0, 0, 0, 0]</span>
+
+        <span class="comment">#check if array is full</span>
+        if len(dynamic_array) == len(dynamic_array):
+            print("Array is full")
+            
+        <span class="comment">#check if array is empty</span>
+        if not dynamic_array:
+            print("Array is empty")
+
+        <span class="comment">#check if array is sorted</span>
+        if dynamic_array == sorted(dynamic_array):
+            print("Array is sorted")
+        </code></pre>
+    </details>
+
+    <details>
+        <summary><strong>Time and Space Complexity of Arrays</strong></summary>
+        <ul>
+            <li>O(1) time complexity for accessing elements by index</li>
+            <li>O(n) time complexity for insertion and deletion at arbitrary positions</li>
+            <li>O(n) space complexity for storing n elements</li>
+            <li>O(b) space complexity for storing b buckets</li>
+            <li>O(n+b) total space complexity</li>
+        </ul>
+    </details>
+</details>
+<!-- Arrays -->
+<details>
+    <summary><strong>Bucket Sort</strong></summary>
+    <details>
+        <summary><strong>What is it and When do we use it?</strong></summary>
+        <ul>
+            <li>What: Bucket sort is a sorting algorithm that works by dividing an array into a number of buckets, and then sorting each bucket individually.</li>
+            <ul>
+                <li>Buckets: Sub-arrays within the main array that store elements of the same value.</li>
+                <li>Steps: 
+                    <ol>
+                        <li>Divide the array into buckets</li>
+                        <li>Sort each bucket individually</li>
+                        <li>Concatenate the buckets</li>
+                    </ol>
+                </li>
+            </ul>
+            <li>When to use it: </li>
+            <ul>
+                <li>When the array is uniformly distributed</li>
+                <li>When the array is small</li>
+                <li>When the array is already sorted</li>
+            </ul>
+        </ul>
+    </details>
+    
+    <details>
+        <summary><strong>Implementation of Bucket Sort</strong></summary>
     <!-- insert code-->
     <pre><code>
-        
-    <span class="comment">//compile this file and include everything in std!</span>
-    #include &lt;bits/stdc++.h&gt;
+    <span class="comment">#initialize an empty bucket sort</span>
+    bucket_sort = []
 
-    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
-    using namespace std;
+    <span class="comment">#initialize a bucket sort with elements</span>
+    bucket_sort = [1, 2, 3, 4, 5]
 
-    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
-    <span class="comment">//operate on data</span>
-    class solution {
-        public:
-        <span class="comment">//Instantiating an array of integers</span>
-        vector&lt;int&gt; intArray;
+    <span class="comment">#sort the array</span>
+    bucket_sort.sort()
 
-        <span class="comment">//function to insert elements into the array</span>
-        void insertElement(int element) {
-            intArray.push_back(element);
-        }
-        
-        <span class="comment">//function to check if element exists in the array</span>
-        bool containsElement(int element) {
-            return find(intArray.begin(), intArray.end(), element) != intArray.end();
-        }
-        
-        <span class="comment">//function to remove an element from an array</span>
-        void removeElement(int element) {
-            intArray.erase(remove(intArray.begin(), intArray.end(), element), intArray.end());
-        }
-
-        <span class="comment">//function to print all elements in an array</span>
-        void printElements() {
-            for (auto element : intArray) {
-                cout &lt;&lt; element &lt;&lt; " ";
-            }
-            cout &lt;&lt; endl;
-        }
-
-        <span class="comment">//function to print elements in reverse order</span>
-        void printReverse() {
-            for (auto it = intArray.rbegin(); it != intArray.rend(); it++) {
-                cout &lt;&lt; *it &lt;&lt; " ";
-            }
-            cout &lt;&lt; endl;
-        }
-
-        <span class="comment">//function to find element in array</span>
-        int findElement(int element) {
-            auto it = find(intArray.begin(), intArray.end(), element);
-            if (it != intArray.end()) {
-                return *it;
-            }
-            return -1;
-        }
-    }
+    <span class="comment">#concatenate the buckets</span>
+    bucket_sort = bucket_sort[0] + bucket_sort[1] + bucket_sort[2] + bucket_sort[3] + bucket_sort[4]
+    
+    <span class="comment">#check if array is sorted</span>
+    if bucket_sort == sorted(bucket_sort):
+        print("Array is sorted")
+    else:
+        print("Array is not sorted")    
     </code></pre>
+    </details>
+
+    <details>
+        <summary><strong>Time and Space Complexity of Bucket Sort</strong></summary>
+        <ul>
+            <li>Time Complexity: O(n+b)</li>
+            <li>Space Complexity: O(n+b)</li>
+        </ul>
     </details>
 </details>
 
 <!-- Vectors -->
 <details>
-    <summary><strong>Vectors</strong></summary>
+    <summary><strong>Prefix Sums</strong></summary>
     <details>
-        <summary><strong>Vectors Explained</strong></summary>
+        <summary><strong>What is it and When do we use it?</strong></summary>
         <ul>
-            <li>What: Vectors are dynamic arrays that can grow and shrink in size.</li>
-            <li>Time-Complexity</li>
-                <ul>
-                    <li>O(1) time complexity for accessing elements by index</li>
-                    <li>O(n) time complexity for insertion and deletion at arbitrary positions (any index in vector, including beginning, middle, and end).  </li>
-                </ul>
-            <li>Space Complexity</li>
-                <ul>
-                    <li>Space to store n elements: O(n)</li>
-                </ul>
+            <li>What: Prefix sums are a technique used to store the sum of all elements in an array up to a certain index.</li>
+            <ul>
+                <li>Steps: 
+                    <ol>
+                        <li>Initialize a prefix sum array</li>
+                        <li>Iterate through the array and store the sum of all elements up to the current index</li>
+                    </ol>
+            </ul>
+            <li>When to use it: </li>
+            <ul>
+                <li>When we need to answer queries about the sum of subarrays</li>
+            </ul>
         </ul>
+    </details>
+    <details>
+        <summary><strong>Implementation of Prefix Sums</strong></summary>
+        <!-- insert code-->
+        <pre><code>
+        <span class="comment">#initialize an empty prefix sum array</span>
+        prefix_sum = []
+
+        <span class="comment">#initialize a prefix sum array with elements</span>
+        prefix_sum = [1, 2, 3, 4, 5]
+
+        <span class="comment">#iterate through the array and store the sum of all elements up to the current index</span>
+        if len(prefix_sum) > 0:
+            for i in range(1, len(prefix_sum)):
+                prefix_sum[i] = prefix_sum[i-1] + prefix_sum[i]
+
+        <span class="comment">#print the prefix sum array</span>
+        print(prefix_sum)
+
+        <span class="comment">#answer queries about the sum of subarrays</span>
+        print(prefix_sum[3] - prefix_sum[1])
+        </code></pre>
     </details>
     
     <details>
-        <summary><strong>Implementation of Vectors</strong></summary>
-    <!-- insert code-->
-    <pre><code>
-        
-    <span class="comment">//compile this file and include everything in std!</span>
-    #include &lt;bits/stdc++.h&gt;
-
-    <span class="comment">//bring all names from std namespace to global namespace (use std without std::)</span>
-    using namespace std;
-
-    <span class="comment">//declare class that stores blueprint for creating objects and functions that-</span>
-    <span class="comment">//operate on data</span>
-    class solution {
-        public:
-        <span class="comment">//Instantiating a vector of integers</span>
-        vector&lt;int&gt; intVector;
-
-        <span class="comment">//function to insert elements into the vector</span>
-        void insertElement(int element) {
-            intVector.push_back(element);
-        }
-        
-        <span class="comment">//function to check if element exists in the vector</span>
-        bool containsElement(int element) {
-            return find(intVector.begin(), intVector.end(), element) != intVector.end();
-        }
-        
-        <span class="comment">//function to remove an element from a vector</span>
-        void removeElement(int element) {
-            intVector.erase(remove(intVector.begin(), intVector.end(), element), intVector.end());
-        }
-
-        <span class="comment">//function to print all elements in a vector</span>
-        void printElements() {
-            for (auto element : intVector) {
-                cout &lt;&lt; element &lt;&lt; " ";
-            }
-            cout &lt;&lt; endl;
-        }
-        <span class="comment">//function to print elements in reverse order</span>
-        void printReverse() {
-            for (auto it = intVector.rbegin(); it != intVector.rend(); it++) {
-                cout &lt;&lt; *it &lt;&lt; " ";
-            }
-            cout &lt;&lt; endl;
-        }
-
-        <span class="comment">//function to find element in vector</span>
-        int findElement(int element) {
-            auto it = find(intVector.begin(), intVector.end(), element);
-            if (it != intVector.end()) {
-                return *it;
-            }
-            return -1;
-        }
-
-        <span class="comment">//function to sort elements in vector</span>
-        void sortElements() {
-            sort(intVector.begin(), intVector.end());
-        }
-
-        <span class="comment">//function to reverse elements in vector</span>
-        void reverseElements() {
-            reverse(intVector.begin(), intVector.end());
-        }
-
-        <span class="comment">//function to get the size of the vector</span>
-        int getSize() {
-            return intVector.size();
-        }
-
-        <span class="comment">//function to clear all elements in the vector</span>
-        void clearElements() {
-            intVector.clear();
-        }
-
-        <span class="comment">//function to check if vector is empty</span>
-        bool isEmpty() {
-            return intVector.empty();
-        }
-
-        <span class="comment">//function to find element in vector</span>
-        int findElement(int element) {
-            auto it = find(intVector.begin(), intVector.end(), element);
-            if (it != intVector.end()) {
-                return *it;
-            }
-            return -1;
-        }
-    }
-    </code></pre>
+        <summary><strong>Time and Space Complexity of Prefix Sums</strong></summary>
+        <ul>
+            <li>Time Complexity: O(n)</li>
+            <li>Space Complexity: O(n)</li>
+        </ul>
     </details>
 </details>
+
+    
 <details>
     <summary><strong>Worked out Leetcode Solutions</strong></summary>
     <details>
         <summary><strong>Contains Duplicate</strong></summary>
         <pre><code>
-        #include &lt;bits/stdc++.h&gt; 
-        using namespace std; 
         
-        class Solution {
-        public:
-            bool hasDuplicate(vector &lt;int&gt; nums) {
-                <span class="comment">//initialize hash set</span>
-                unordered_set&lt;int&gt; set; 
-        
-                <span class="comment">//iterate through nums</span>
-                for (int i = 0; i < nums.size(); i++) 
-                {
-                    <span class="comment">//FIRST: CHECK IF value in hash set</span>
-                    <span class="comment">//set.find(nums[i]) != set.end()</span>
-                    <span class="comment">/*
-                    if element is found, find() returns iterator pointing to that element
-                    If element is not found, it returns set.end()
-        
-                    set.end(): represents invalid position; does not point to actual element in container.
-                        - used to return boolean for set.find() 
-                    */</span>
-                    if (set.find(nums[i]) != set.end())
-                    {
-                        return true; 
-                    }
-        
-                    <span class="comment">//THEN after checking, append it to set</span>
-                    set.insert(nums[i]);
-                }
-                return false; 
-            }
-        };
         </pre></code>
     </details>
     
     <details>
         <summary><strong>Valid Anagram</strong></summary>
         <pre><code>
-        #include &lt;bits/stdc++.h&gt;
-
-        using namespace std;
-        
-        class Solution {
-        public:
-            bool isAnagram(string s, string t) {
-            <span class="comment">//base-case: check if strings are the same length. If not, they can't be anagrams</span>
-            if (s.length() != t.length())
-            {
-                return false;
-            }
-        
-            <span class="comment">//instantiate unordered map</span>
-            <span class="comment">//key: char (since we're iterating char c: s)</span>
-            <span class="comment">//value: int -> frequency</span>
-            unordered_map&lt;char, int&gt; charCount; 
-        
-            <span class="comment">//count frequency of each character in string s</span>
-            for (char c : s)
-            {
-                charCount[c]++; 
-            }
-        
-            <span class="comment">//iterate through each character in string t</span>
-            for (char c : t)
-            {
-                if (charCount.find(c) != charCount.end())
-                {
-                    <span class="comment">//if character (key) is in the unordered_map, decrement (value) by 1</span>
-                    charCount[c]--;
-                    <span class="comment">//if (value) goes to 0 for character (key), remove character (key) from the map</span>
-                    if (charCount[c] == 0)
-                    {
-                        charCount.erase(c);
-                    }
-                }
-                <span class="comment">//character (key) is not in the map</span>
-                else
-                {
-                    return false;
-                }
-                
-            }
-        
-            <span class="comment">//if all characters (keys) are found, map should return true if empty.</span>
-            return (charCount.empty());
-            }
-        };
-    </code></pre>
+       
+        </code></pre>
     </details>
 
     <details>
     <summary><strong>Two Sum</strong></summary>
     <pre><code>
-    #include &lt;bits/stdc++.h&gt;
-
-    using namespace std;
-    
-    class Solution {
-    public:
-        vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
-            <span class="comment">//instantiate an ordered map</span>
-            <span class="comment">//stores index and value</span>
-            map&lt;int, int&gt; intMap; 
-    
-            <span class="comment">//initialize vector to hold pair</span>
-            vector&lt;int&gt; pair; 
-    
-            <span class="comment">//iterate through each value in nums</span>
-            for (int i = 0; i < nums.size(); i++)
-            {
-                int complement = target - nums[i];
-    
-                <span class="comment">//check if complement (key) exists in the map</span>
-                if (intMap.find(complement) != intMap.end())
-                {
-                    <span class="comment">//first value in pair</span>
-                    <span class="comment">//intMap[complement]: returns index (value) where key(complement) is</span>
-                    pair.push_back(intMap[complement]); 
-                    
-                    <span class="comment">//second value in pair</span>
-                    <span class="comment">//returns index of nums[i]</span>
-                    pair.push_back(i);
+    class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        <span class="comment">#we're working with a static array, want to return index of value and its complement -> map</span>
+        hmap = {}
+        <span class="comment">#list to hold result pair</span>
+        pair = []
+        if len(nums) > 0:
+            for i in range(0, len(nums)):
+                complement = target - nums[i]
+                if (complement in hmap):
+                    pair.append(hmap[complement])
+                    pair.append(i)
                     break;
-                }
-    
-                <span class="comment">//key: the number (what we're searching for)</span>
-                <span class="comment">//value: the index (what we want in our result)</span>
-                intMap[nums[i]] = i; 
-            }
-            return pair;
-        }
-    };
+                <span class="comment">#set key to number, value to index</span>
+                hmap[nums[i]] = i
+            return pair
     </pre></code>
     </details>
     
 </details>
 
-
-<!-- modal1: containers (unordered_sets explained) -->
-<div id="containers" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('containers')">&times;</span>
-      <ul>
-        <li>Containers: data structure that stores and organizes a collection of elements.</li>
-        <ul>
-            <li>They are a part of C++ Standard library</li>
-            <li>They handle storage, retrieval, and management of elements</li>
-            <li><strong>Algorithms and iterators operate on containers, but containers themselves dont apply algorithms/iterators.</strong></li>
-        </ul>
-        <li>Associative Containers: Types of containers that <strong>store elements in a way that allows for fast retrieval using keys (values used to uniquely identify elements in the container)</strong></li>
-      </ul>
-    </div>
-  </div>
-
-<!-- modal2: internal (unordered_sets explained) -->
-<div id="internal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('internal')">&times;</span>
-      <h2>Internal workings of unordered_sets</h2>
-      <ul>
-        <li><strong>Hash Function</strong></li>
-        <ul>
-            <li>Hash function takes an input (key) and returns an integer (hash code)</li>
-            <li>Hash code is used to determine the index in a (bucket) array where the element will be stored.</li>
-            <li>Hash functions contain a load factor (measure of how full the hash table is). 
-            <ul>
-                <li>It's computed by \(\frac{n}{b}\) where n is the number of elements in the table and b is the number of buckets in the table.</li>
-                <li>Typical Threshold is 0.75. When threshold is exceeded, table is resized: # buckets are resized and existing elements are rehashed into new buckets.</li>
-            </ul>
-        </ul>
-        <li><strong>buckets</strong></li>
-        <ul>
-            <li>Hash table consists of an array of buckets</li>
-            <li>Each bucket can store multiple elements in case of hash collisions (when different keys produce the same hash code)</li>
-        </ul>
-        <li><strong>Collision Resolution</strong></li>
-        <ul>
-            <li><strong>Chaining</strong>: Each bucket contains a linked list of elements that hash to the same index</li>
-            <li><strong>Open Addressing</strong>: Elements are stored directly in the array, and collisions are resolved by probing (finding another empty slot)</li>
-        </ul>
-      </ul>
-    </div>
-</div>
-
-<!-- modal3: sb-binary-tree -->
-<div id="sb-binary-tree" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal('sb-binary-tree')">&times;</span>
-      <h2>Self-Balancing Binary Search Tree</h2>
-      <ul>
-        <li>What: A binary search tree that automatically keeps the tree balanced after insertions and deletions</li>
-        <li>How it works: 
-            <ul>
-                <li>It uses rotations to keep the tree balanced</li>
-                <li>Rotations are performed when the tree becomes unbalanced (i.e., when the height of the left and right subtrees differ by more than 1)</li>
-            </ul>
-        </li>
-        <li>Why it's useful: 
-            <ul>
-                <li>Ensures that the tree remains balanced, which guarantees logarithmic time complexity for insertion, deletion, and lookup operations</li>
-                <li>Without balancing, the tree could degenerate into a linked list, leading to linear time complexity (O(n))for these operations</li>
-            </ul>
-        </li>
-      </ul>
-    </div>
 
 
 <script>
@@ -953,4 +725,3 @@ window.onclick = function(event) {
 
 </body>
 </html>
-
