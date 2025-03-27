@@ -209,7 +209,7 @@
                 <li>We do so by substituting non-terminal symbols (A, B, S) on the right side of a rule with their corresponding rule.</li>
                 <li>We do this until we have no more "unit rules" (rules with single, non-terminal symbols on the right side!).</li>
             </ul>
-            First iteration: Remove unit rule S from S
+            First iteration: Remove S from unit rule (S \(\rightarrow\) S)
             <ul>
                 <li>\(S \rightarrow ASA \mid aB \mid a \mid AS \mid SA \mid S\) becomes \(S \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
                 <li>We should now have the following</li>
@@ -220,7 +220,7 @@
                     B &\rightarrow b
                 \end{align*}
             </ul>
-            Second iteration: Remove unit rule S from \(S_{0} \rightarrow S\) using subtitution
+            Second iteration: Remove S from unit rule (\(S_{0} \rightarrow S\)) using substitution
             <ul>
                 <li>\(S_{0} \rightarrow S\) turns into \(S_{0} \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
                 <li>We should now have the following:
@@ -231,8 +231,8 @@
                         B &\rightarrow b
                     \end{align*}
                 </li>
-            </ul>
-            Third iteration: Remove unit rule B from \(A \rightarrow B \mid S\)
+            </ul>       
+            Third iteration: Remove B from unit rule \(A \rightarrow B \mid S\)
             <ul>
                 <li>\(A \rightarrow B \mid S\) turns into \(A \rightarrow b \mid S\)</li>
                 <li>We should now have the following:</li>
@@ -243,7 +243,7 @@
                     B &\rightarrow b
                 \end{align*}
             </ul>
-            Fourth iteration: Remove unit rule S from \(A \rightarrow b \mid S\)
+            Fourth iteration: Remove S from unit rule \(A \rightarrow b \mid S\)
             <ul>
                 <li>\(A \rightarrow b \mid S\) turns into \(A \rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA\)</li>
                 <li>We should now have the following:</li>
