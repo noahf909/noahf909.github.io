@@ -190,13 +190,13 @@
                         \end{align*}
                         Result from combinations:
                         \begin{align*}
-                            S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA
+                            S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \mid S
                         \end{align*}
                     </li>
                     <li>At the end of this second iteration, we should have the following:</li>
                     \begin{align*}
                         S_{0} &\rightarrow S \\
-                        S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \\
+                        S &\rightarrow ASA \mid aB \mid a \mid AS \mid SA \mid S\\
                         A &\rightarrow B \mid S\\
                         B &\rightarrow b
                     \end{align*}
@@ -209,7 +209,18 @@
                 <li>We do so by substituting non-terminal symbols (A, B, S) on the right side of a rule with their corresponding rule.</li>
                 <li>We do this until we have no more "unit rules" (rules with single, non-terminal symbols on the right side!).</li>
             </ul>
-            First iteration: Remove unit rule S from \(S_{0} \rightarrow S\)
+            First iteration: Remove unit rule S from S
+            <ul>
+                <li>\(S \rightarrow ASA \mid aB \mid a \mid AS \mid SA \mid S\) becomes \(S \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
+                <li>We should now have the following</li>
+                \begin{align*}
+                    S_{0} &\rightarrow S \\
+                    S &\rightarrow ASA \mid aB \mid a \mid SA \mid AS \\
+                    A &\rightarrow B \mid S \\
+                    B &\rightarrow b
+                \end{align*}
+            </ul>
+            Second iteration: Remove unit rule S from \(S_{0} \rightarrow S\) using subtitution
             <ul>
                 <li>\(S_{0} \rightarrow S\) turns into \(S_{0} \rightarrow ASA \mid aB \mid a \mid AS \mid SA\)</li>
                 <li>We should now have the following:
@@ -221,7 +232,7 @@
                     \end{align*}
                 </li>
             </ul>
-            Second iteration: Remove unit rule B from \(A \rightarrow B \mid S\)
+            Third iteration: Remove unit rule B from \(A \rightarrow B \mid S\)
             <ul>
                 <li>\(A \rightarrow B \mid S\) turns into \(A \rightarrow b \mid S\)</li>
                 <li>We should now have the following:</li>
@@ -232,7 +243,7 @@
                     B &\rightarrow b
                 \end{align*}
             </ul>
-            Third iteration: Remove unit rule S from \(A \rightarrow b \mid S\)
+            Fourth iteration: Remove unit rule S from \(A \rightarrow b \mid S\)
             <ul>
                 <li>\(A \rightarrow b \mid S\) turns into \(A \rightarrow b \mid ASA \mid aB \mid a \mid AS \mid SA\)</li>
                 <li>We should now have the following:</li>
@@ -277,9 +288,9 @@
                 </ul>
                 <li>We should now have the following:</li>
                 \begin{align*}
-                    S_{0} &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
-                    S &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
-                    A &\rightarrow b \mid A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    S_{0} &\rightarrow AA_{1} \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow AA_{1} \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid AA_{1} \mid aB \mid a \mid AS \mid SA \\
                     A_{1} &\rightarrow SA \\
                     U &\rightarrow a \\
                     B &\rightarrow b \\
@@ -289,9 +300,9 @@
             <ul>
                 <li>As listed above, we now have the following rules in proper form:</li>
                 \begin{align*}
-                    S_{0} &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
-                    S &\rightarrow A_{1}A \mid aB \mid a \mid AS \mid SA \\
-                    A &\rightarrow b \mid A_{1}A \mid aB \mid a \mid AS \mid SA \\
+                    S_{0} &\rightarrow AA_{1} \mid aB \mid a \mid AS \mid SA \\
+                    S &\rightarrow AA_{1} \mid aB \mid a \mid AS \mid SA \\
+                    A &\rightarrow b \mid AA_{1} \mid aB \mid a \mid AS \mid SA \\
                     A_{1} &\rightarrow SA \\
                     U &\rightarrow a \\
                     B &\rightarrow b \\
