@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrays and Hashing- Python</title>
+    <title>Python Leetcode</title>
 
     <!-- MathJax for LaTeX-style equations -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -125,7 +125,7 @@
     </style>
 </head>
 <body>
-<h2>Arrays and Hashing (Python)</h2>
+<h2>Python Leetcode</h2>
 
 <h3>Understanding Runtime (Brief Review)</h3>
 <details>
@@ -147,7 +147,7 @@
     </ul>
 </details>
 
-<h3>Data Structures and their Implementations</h3>
+<h3>Arrays and Hashing</h3>
 <details>
     <summary><strong>Hash Usage</strong></summary>
     <details>
@@ -364,6 +364,7 @@
     <span class="comment">#enumerate operation (key pattern 4)</span>
     for i, char in enumerate(chars): <span class="comment">#enumerate returns index and value of each element in a list</span>
         print(i, char)
+    </code></pre>
     </details>
     <details>
         <summary><strong>Time and Space Complexity of Hash Sets and Hash Maps</strong></summary>
@@ -662,6 +663,50 @@
         </ul>
     </details>
 </details>
+<details>
+    <summary><strong>String Manipulation</strong></summary>
+    <details>
+        <summary><strong>What is it and When do we use it?</strong></summary>
+        <ul>
+            <li>What: String manipulation is the process of manipulating strings to achieve a desired outcome.</li>
+            <ul>
+                <li>Steps: 
+                    <ol>
+                        <li>Initialize a string</li>
+                        <li>Iterate through the string and manipulate it</li>
+                        <li>Return the manipulated string</li>
+                    </ol>
+            </ul>
+        </ul>
+    </details>
+    <details>
+        <summary><strong>String Manipulation Operations</strong></summary>
+        <pre><code>
+        <span class="comment">#initialize a string</span>
+        string = "Hello, World!"
+
+    <span class="comment">#reverse a string</span>
+    string[::-1] <span class="comment">#[::1]: start at the end of the string and step backwards</span>
+
+    <span class="comment">#check if a string is a palindrome</span>
+    string == string[::-1]
+
+    <span class="comment">#count the number of vowels in a string</span>
+    vowels = "aeiou"
+    count = 0
+    for char in string:
+        if char in vowels:
+            count += 1
+    print(count)
+
+    <span class="comment">#count the number of words in a string</span>
+    words = string.split()
+    print(len(words))
+    
+    <span class="comment">#check if reverse of string is a palindrome</span>
+    </pre></code>
+    </details>
+</details>
 
     
 <details>
@@ -669,14 +714,38 @@
     <details>
         <summary><strong>Contains Duplicate</strong></summary>
         <pre><code>
-        
+        class Solution:
+        def hasDuplicate(self, nums: List[int]) -> bool:
+            #create set that removes duplicates from list
+            s = list(set(nums))
+            #if they are the same size (duplicates removed)
+            if len(s) == len(nums):
+                return False
+            #not the same size (there are duplicates)
+            else:
+                return True
         </pre></code>
     </details>
     
     <details>
         <summary><strong>Valid Anagram</strong></summary>
         <pre><code>
-       
+        class Solution:
+        def isAnagram(self, s: str, t: str) -> bool:
+            freq1 = {}
+            freq2 = {}
+            for char in s:
+                freq1[char] = freq1.get(char, 0) + 1
+            for char in t:
+                freq2[char] = freq2.get(char, 0) + 1
+            if freq1 == freq2:
+                return True
+                freq1.clear()
+                freq2.clear()
+            else:
+                return False
+                freq1.clear()
+                freq2.clear()
         </code></pre>
     </details>
 
@@ -701,7 +770,138 @@
             return pair
     </pre></code>
     </details>
+    <details>
+        <summary><strong>Group Anagrams</strong></summary>
+        <ul>
+            <li>Concepts to Consider:</li>
+            <ul>
+                <li>Words that are anagrams of each other form the same word when sorted</li>
+                <li>brute-force: it takes nlogn time to sort a word and m time to iterate through each word in the list</li>
+                <li>Better: We use a hash map where...</li>
+                <ul>
+                    <li>Key: the frequency of each letter in the word (ex: 1e, 1a, 1t)</li>
+                    <li>value: the list of words that correspond to the key (ex: ["eat", "tea", "ate"])</li>
+                    <li>Time complexity: O(n*m) where m is the number of input strings given and n is the average length of the strings</li>
+                    <ul>
+                        <li>to get n, we're counting how many of each character the string has</li>
+                        <li>We would do this by creating a count array that represents the key</li>
+                    </ul>
+                </ul>
+            </ul>
+        </ul>
+        <details>
+            <summary><strong>Implementation</strong></summary>
+            <pre><code>
+            class Solution:
+                def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+                <span class="comment">#create a hash map to store the key and value</span>
+                hmap = defaultdict(list) <span class="comment">#defaultdict(list): if the key is not found, it will create a new list</span>
+                <span class="comment">#iterate through each word in the list</span>
+                for s in strs:
+                    <span class="comment">#create a count array for each word.</span>
+                    <span class="comment">#array will be the same size as the alphabet (26 letters)</span>
+                    <span class="comment">#why we're doing this: count how many of each character the word has</span>
+                    count = [0] * 26
+                    <span class="comment">#iterate through each character in the word</span>
+                    for c in s:
+                        <span class="comment">#ord() returns the ASCII value of the character</span>
+                        <span class="comment">#subtract ord('a') to get the index of the character in the count array</span>
+                        count[ord(c) - ord('a')] += 1 <span class="comment">#count array will hold binary representation of the word</span>
+                    <span class="comment">#set the count array as the key, and set the value to the string</span>
+                    <span class="comment">#tuple() is used to convert the count array to a tuple</span>
+                    <span class="comment">#why tuple? Makes it immutable; ensures that the count array is not changed</span>
+                    hmap[tuple(count)].append(s) <span class="comment">#if the count array is already in the hash map, it will append the word to the already existing list</span>
+                <span class="comment">#return the value (list of lists) of the hash map</span>
+                return hmap.values() 
+            </pre></code>
+        </details>
+        <details>
+            <summary><strong>Top K Frequent Elements</strong></summary>
+        </details>
+    </details>
+    <details>
+        <summary><strong>Return K Top Frequent Elements</strong></summary>
+        <pre><code>
+        class Solution:
+        def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+            hmap = {}
+            for num in nums:
+                <span class="comment">#create a hash map to store the number and its frequency</span>
+                <span class="comment">#{1:1, 2:2, 3:3}</span>
+                hmap[num] = hmap.get(num, 0) + 1
+            <span class="comment">#1st param: iterate over dictionary keys</span>
+            <span class="comment">#2nd param key=hmap.get: tell sorted() to compare by value instead of key</span>
+            <span class="comment">#3rd param: reverse=True: start with largest values first</span>
+            <span class="comment">#[:k]: take only first k elements from sorted sequence </span>
+            return sorted(hmap, key=hmap.get, reverse=True)[:k]            
+        </pre></code>
+    </details>
+    <details>
+        <summary><strong>Valid Sudoku</strong></summary>
+        <pre><code>
+        class Solution:
+        def isValidSudoku(self, board: List[List[str]]) -> bool:
+            <span class="comment">#defaultdict(set): initializes the set for an index that doesnt exist in it yet</span>
+            <span class="comment">#made so we can assign cols[c], rows[c] from the get-go</span>
+            <span class="comment">#cols: set containing all values in col</span>
+            cols = defaultdict(set)
+            <span class="comment">#rows: set containing all values in row</span>
+            rows = defaultdict(set)
+            
+            <span class="comment">#squares: all values in 3x3 box</span>
+            squares = defaultdict(set)
     
+            <span class="comment">#for each row/col (item in the box)</span>
+            for r in range(9):
+                for c in range(9):
+                    if (board[r][c] == "."): <span class="comment">#if item is "." symbol</span>
+                        continue
+                    if (
+                        board[r][c] in rows[r] or
+                        board[r][c] in cols[c] or
+                        <span class="comment">#squares[(r//3, c//3)]</span>
+                        <span class="comment">#checks if duplicate in sub-box (3x3)</span>
+                        board[r][c] in squares[(r//3, c//3)]
+                    ):
+                        return False
+                    cols[c].add(board[r][c])
+                    rows[r].add(board[r][c])
+                    squares[(r // 3, c // 3)].add(board[r][c])
+            return True 
+        </code></pre>
+    </details>
+</details>
+<h3>Two Pointers</h3>
+<details>
+    <summary><strong>What are they and when do we use them?</strong></summary>
+    <ul>
+            <li>What: Two pointers are a technique used to solve problems by using two pointers to traverse an array or string.</li>
+        <li>When: We use two pointers when we need to find a pair of elements in an array that satisfy a certain condition.</li>
+            <li>How: We use two pointers to traverse the array or string and check if the elements satisfy the condition.</li>
+        </ul>
+</details>
+<details>
+        <summary><strong>Implementation</strong></summary>
+        <pre><code>
+        <span class="comment">#check if palindrome</span>
+        def isPalindrome(self, s: str) -> bool:
+            <span class="comment">#two pointers</span>
+            left = 0
+            right = len(s) - 1
+
+            <span class="comment">#iterate through the string</span>
+            while left < right:
+                if word[left] != word[right]:
+                    return False
+                left += 1
+                right -= 1
+            return True
+        </code></pre>
+    </details>
+</details>
+<h3>Sliding Window</h3>
+<details>
+    <summary><strong>What is it and when do we use it?</strong></summary>
 </details>
 
 
@@ -725,3 +925,9 @@ window.onclick = function(event) {
 
 </body>
 </html>
+
+
+<!--
+return k top frequent elements: pulling k items from list sorted by frequency from hash map
+group anagrams: create key for each word, sort the word, append to list, and then return value (words)
+-->
