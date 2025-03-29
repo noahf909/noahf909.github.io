@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regular Expressions and GFA</title>
+    <title>Decidability and the Halting Problem</title>
 
     <!-- MathJax for LaTeX-style equations -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -114,11 +114,116 @@
     <body>
     <!--Center the content-->
     <div class="center">
-        <h3>Decidability</h3>
+        <h3>Decidability and the Halting Problem</h3>
     </div>
     <p>
-        <strong>Problem 1: What constitutes a decidable problem? </strong>
+        <strong>Problem 1: How can we <span class="highlight" onclick="openModal('decideModal')">decide</span> the <span class="highlight" onclick="openModal('acceptanceModal')">acceptance</span> for the following turing machine:</strong>
+        \begin{align*}
+            A_{TM} = \{\langle M, s \rangle \mid M \text{ is a turing machine that accepts } s\}
+        \end{align*}
+        <br><strong>Step 1: Understand the problem</strong>
+        <ul>
+            <li>It's recursive</li>
+            <li>Given that a turing machine is a finite message, we can then interpret \(M\) in this context as a string</li>
+        </ul>
+        <br><strong>Step 2: Assume it's decidable</strong>
+        <ul>
+            <li>If it's decidable, then there exists a decider \(H\) (a turing machine that <span class="highlight" onclick="openModal('decideModal')">decides</span> \(A_{TM}\))</li>
+            <ul>
+                <li>This means that \(H\) will run on \(\langle M, s \rangle\) and...</li>
+                <ul>
+                    <li>Accept if \(M\) accepts \(s\)</li>
+                    <li>Reject if \(M\) rejects \(s\)</li>
+                </ul>
+                <li>Overall: \(H \langle M, s \rangle\) accepts if \(M\) accepts \(s\) and rejects otherwise</li>
+                <li>Therefore, \(H\) is a halting decider where it decides if \(M\) halts or not</li>
+            </ul>
+        </ul>
+        <br><strong>Step 3: Contradiction - Consider a new "Devil's Advocate" machine</strong>
+        <ul>
+            <li>Consider \(D\), our new "Devil's Advocate" machine</li>
+            <li>Let \(D\) be the machine that takes the decider \(H\), runs it on the encoding of the original machine, and outputs the opposite result. That is...</li>
+            <ul>
+                <li>\(D (\langle M \rangle) \text{ accepts if } H (\langle M, \langle M \rangle \rangle \)) rejects, and rejects if it accepts</li>
+                <ul>
+                    <li>H: the decider (a turing machine that always halts iwth an accept or reject answer)</li>
+                    <li>M: the turing machine we are testing</li>
+                    <li>\(\langle M \rangle\): the encoding of the turing machine M as a string</li>
+                    <li>\(\langle M, \langle M \rangle \rangle\): the input to the decider H, where M is the machine and \(\langle M \rangle\) is the encoding of M as a string</li>
+                    <li>\(H \langle M, \langle M \rangle \rangle\): the output of the decider H, where M is the machine and \(\langle M \rangle\) is the encoding of M as a string</li>
+                    <ul>
+                        <li>In english: Does Turing machine \(M\) accept its own encoding as an input?</li>
+                        <li>If turing machine \(M\) rejects its own encoding, then \(D \langle M \rangle\) accepts</li>
+                        <li>If turing machine \(M\) accepts its own encoding, then \(D \langle M \rangle\) rejects</li>
+                        <li>In other words, \(D \langle M \rangle\) accepts if \(M\) rejects \(\langle M \rangle\), and rejects if \(M\) accepts \(\langle M \rangle\)</li>
+                    </ul>
+                </ul>
+            </ul>
+        </ul>
+        <br><strong>Step 4: Run \(D\) on itself</strong>
+        <ul>
+            <li>In this case, \(D\) is the decider and \(\langle D \rangle\) is the encoding of \(D\) as a string</li>
+            <li>\(D (\langle D \rangle) \text{ accepts if } D \text{ rejects } \langle D \rangle, \text{ and rejects if } D \text{ accepts } \langle D \rangle\)</li>
+            <li>We get a contradiction:</li>
+            <ul>
+                <li>\(D\) is designed to do the opposite of what a machine \(M\) would do on its own encoding:</li>
+                <ul>
+                    <li>If a machine accepts its own encoding, then \(D\) rejects</li>
+                    <li>If a machine rejects its own encoding, then \(D\) accepts</li>
+                </ul>
+                <li>When \(D\) runs on itself:</li>
+                <ul>
+                    <li>If \(D\) accepts \(\langle D \rangle\), then \(D\) rejects \(\langle D \rangle\)</li>
+                    <li>If \(D\) rejects \(\langle D \rangle\), then \(D\) accepts \(\langle D \rangle\)</li>
+                    <li><strong>The contradiction: \(D\) cannot both accept and reject \(\langle D \rangle\)</strong></li>
+                </ul>
+                <li>Why this proves that \(A_{TM}\) is undecidable:</li>
+                <ul>
+                    <li>We defined \(A_{TM}\) as a language and assumed \(H\) is a decider for this language that runs on inputs of the form \(\langle M, s \rangle\)</li>
+                    <li>If \(H\) exists, it must satisfy these conditions:</li>
+                    <ul>
+                        <li>Accept if \(M\) accepts s</li>
+                        <li>Reject if \(M\) rejects s</li>
+                    </ul>
+                    <li>Using \(H\), we constructed machine \(D\) that takes an input \(\langle M \rangle\) and:</li>
+                    <ul>
+                        <li>Runs \(H\) on \(\langle M, \langle M \rangle \rangle\) to determine if \(M\) accepts its own encoding</li>
+                        <li>Does the opposite of what \(H\) determines:</li>
+                        <ul>
+                            <li>\(D\) rejects \(\langle M \rangle\) if \(M\) accepts \(\langle M \rangle\)</li>
+                            <li>\(D\) accepts \(\langle M \rangle\) if \(M\) rejects \(\langle M \rangle\)</li>
+                        </ul>
+                    </ul>
+                    <li>Now we examine what happens when \(D\) runs on its own encoding \(\langle D \rangle\):</li>
+                    <ul>
+                        <li>If \(D\) accepts \(\langle D \rangle\), then by \(D\)'s definition, \(D\) must reject \(\langle D \rangle\)</li>
+                        <li>If \(D\) rejects \(\langle D \rangle\), then by \(D\)'s definition, \(D\) must accept \(\langle D \rangle\)</li>
+                        <li><strong>This creates a contradiction: \(D\) both accepts and rejects \(\langle D \rangle\)</strong></li>
+                    </ul>
+                    <li>The contradiction proves:</li>
+                    <ul>
+                        <li><strong>Our assumption that decider \(H\) exists must be false</strong></li>
+                        <li><strong>Therefore, \(A_{TM}\) is undecidable - no algorithm can determine for all possible inputs whether a Turing machine accepts a given string</strong></li>
+                    </ul>
+                </ul>
+            </ul>
+        </ul>
     </p>
+    <p>
+        <strong>Problem 2: How does Problem 1 demonstrate the halting problem?</strong>
+        <ul>
+        Context -
+            <li>The halting problem is the problem of determining whether a given Turing machine will halt on a given input</li>
+            \begin{align*}
+                HALT_{TM} = \{\langle M, s \rangle \mid M \text{ is a turing machine that halts on input } s\}
+            \end{align*}
+        Explanation -
+            <li>We make an observation that if \(A_{TM}\) is decidable, then the halting problem is decidable</li>
+            <li>However, we showed that \(A_{TM}\) is undecidable in Problem 1</li>
+            <li>Therefore, we demonstrated the following principle of the problem: <strong>The halting problem is always undecidable</strong></li>
+        </ul>
+    </p>
+<!--
     <p>
         <strong>Problem 2: Is the following decidable? How would I demonstrate what it's trying to prove?
             \[ 
@@ -165,6 +270,41 @@
             How do we demonstrate that if \(HALT_{TM}\) is decidable, then \(A_{TM}\) is decidable as well?
         </strong>
     </p>
+-->
+    <!-- modal 1-->
+    <div id="decideModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('decideModal')">&times;</span>
+            <h2>Deciability and to Decide</h2>
+            <ul>
+                <li>Decidability: Can we determine IF the turing machine \(A_{TM}\) will...</li>
+                <ul>
+                    <li>halt in an accept state for inputs in the language</li>
+                    <li>halt in a reject state for inputs not in the langauge</li>
+                    <li><strong>will it halt!?</strong></li>
+                </ul>
+                <li>Decide: When we say that a turing machine does decide a string</li>
+                <ul>
+                    <li>The turing machine will halt on the accept state for inputs in the language</li>
+                    <li>The turing machine will halt on the reject state for inputs not in the language</li>
+                </ul>
+            </ul>
+        </div>
+    </div>
+    <!-- modal 2-->
+    <div id="acceptanceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('acceptanceModal')">&times;</span>
+            <h2>Acceptance</h2>
+            <ul>
+                <li>Acceptance: When we say a turing machine accepts a string, we mean that...</li>
+                <ul>
+                    <li>For inputs in the language, the turing machine will halt on the accept state</li>
+                    <li>For inputs not in the language, the turing machine will either halt in a reject state OR <strong>run forever (not halt)</strong></li>
+                </ul>
+            </ul>
+        </div>
+    </div>
     <script>
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "block";
