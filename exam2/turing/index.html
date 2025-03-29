@@ -128,7 +128,7 @@ Both
 </head>
     <body>
         <div class="center">
-            <h1>Turing Machines</h1>
+            <h1>Introduction to Turing Machines</h1>
         </div>
         <p>
             <strong>Problem 1: What is a turing machine? Break down the formal definition and behaviors of a turing machine, and elaborate on how we can further clarify transitions.</strong>
@@ -477,7 +477,43 @@ Both
                 </ul>
             </ul>
             <li>To verify the encoding for the first list, the TM will do the following:</li>
+            <ul>
+                <li>Check if the first list is in proper form (comma separated, no duplicates)</li>
+                <li>Check that the list is properly terminated</li>
+                <li>If conditions arent met, the TM will reject the input</li>
+            </ul>
             <li>To verify the encoding of the second list, the TM will do the following:</li>
+            <ul>
+                <li>Check if the second list is in proper form (each pair is comma separated, no duplicates)</li>
+                <li>Check that every node in the edge list also appears in the node list</li>
+                <li>If conditions arent met, the TM will reject the input</li>
+            </ul>
+        </ul>
+        <br><strong>Step 2: Stage 1</strong>
+        <ul>
+            <li>The TM will mark the first node (1) with a dot on the leftmost digit as follows:</li>
+        </ul>
+        <br><strong>Step 3: Stage 2</strong>
+        <ul>
+            <li>The TM will scan the list of nodes to find an undotted node (2) = \(n_{1}\) and flag it by underlining it</li>
+            <li>TM will scan the list again until it finds a dotted node (1) = \(n_{2}\) and then underlines it (1 is now dotted and underlined)</li>
+            <li>TM will then scan list of edges. For each edge, TM will test whether the two underlined nodes (\(n_{1}\) and \(n_{2}\)) are are the ones appearing in that edge</li>
+            <ul>
+                <li>If they are: move onto <strong>stage 3</strong> where... 
+                <ul>
+                    <li>TM dots \(n_{1}\), removes its underline, and then goes to the first step of <strong>stage 2</strong> with \(n_{2}\) as the new \(n_{1}\) (\(n_{1} = 2\))</li>
+                    <li>This will continue until all nodes are dotted</li>
+                </ul>
+                <li>If they are not: TM checks next edge on the list, if there are no more edges, then \(\{n_{1}, n_{2}\}\) is not an edge of \(G\)</li>
+            </ul>
+        </ul>
+        <br><strong>Step 3: Stage 4</strong>
+        <ul>
+            <li>TM will scan list of nodes to determine if they are all dotted...</li>
+            <ul>
+                <li>If they are: TM enters the accept state and halts</li>
+                <li>If they are not: TM enters the reject state and halts</li>
+            </ul>
         </ul>
     </p>
 
