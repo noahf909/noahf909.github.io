@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decidability, Undecidability, and the Halting Problem</title>
+    <title>Determining if a Turing Machine is Decidable (Inline Turing Machine Construction)</title>
 
     <!-- MathJax for LaTeX-style equations -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -114,11 +114,198 @@
     <body>
     <!--Center the content-->
     <div class="center">
-        <h3>Determining if a Turing Machine is Decidable</h3>
+        <h3>Determining if a Turing Machine is Decidable (Inline Turing Machine Construction)</h3>
     </div>
-    <p>
-
-    </p>
+        <p>
+            <strong>Problem 1: </strong>In graphs, a traingle is a 3-clique: a subset of three vertices all of which are connected to each other. Show that the question of whether a graph contains a triangle is decidable.
+            <br><br>In other words, let \(TRIANGLE_{G}\) be the language of encoded graphs that contain a triangle. Show that this language is decidable, or Turing-decidable: that a turing machine can successfully decide it (and therefore, decide whether a graph contains a triangle).
+            <br><br><strong>Proof: Construction - Turn the Graph into a language and construct an <span class="highlight" onclick="openModal('algorithm')">algorithm</span></strong>
+            <br><br><strong>Transforming the Graph into a Language -</strong>
+            <br><br>Let \(\langle G \rangle\) be the encoding of a graph \(G\). We define the following:
+            <br><br>\(M_{triangle}\): on input \(\langle G \rangle\): 
+            <ul>
+                <li>1. Obtain the graph, its vertices, and its edges \(\rightarrow\)parse \(\langle G \rangle\) to get \(G\) = \((V, E)\) where \(V\) is the set of vertices and \(E\) is the set of edges</li>
+                <li>2. Construct the algorithm:</li>
+                <ul>
+                    <li>For vertex \(v \in V\): //for each vertex in the set of vertices in the graph</li> 
+                    <ul>
+                        <li>For vertex \(w \in V, w \neq v\): //for each vertex in the set of vertices in the graph, excluding the current vertex</li>
+                        <ul>
+                            <li>For vertex \(x \in V, x \neq v, x \neq w\): //for each vertex in the set of vertices in the graph, excluding the current vertex and the other vertex</li>
+                            <ul>
+                                <li>if all edges \( (v,w), (v,x), (w,x) \in E \), accept // if the current vertex, the other vertex, and the other vertex's neighbor are all connected by an edge, accept (it's a triangle)</li>
+                                <ul>
+                                    <li>Accept</li>
+                                </ul>
+                            </ul>
+                        </ul>
+                    </ul>
+                    <li>If no triangle is found, reject</li>
+                </ul>
+            </ul>
+        </p>
+        <p>
+            <br><strong>Problem 2:</strong> Consider the language of Turing machines whose languages are in turn empty. (In other words, consider the set of Turing machines that always reject.) 
+            We can formulate this problem as a language by encoding Turing machines into strings.
+            \begin{align*}
+                E_{TM} = \{\langle M \rangle \mid M \text{ is a turing machine with }L(M) = \emptyset \}
+            \end{align*}
+            Show that \(E_{TM}\) is undecidable, and therefore, that a turing machine cannot decide whether another turing machine's language is empty.
+            <br><br><strong>Proof: Contradiction by inline turing machine construction</strong>
+            <br><br> <span class="highlight" onclick="openModal('contradiction')">Assume by the way of contradiction</span> that \(E_{TM}\) is decidable. 
+            <br><br>By <span class="highlight" onclick="openModal('decidability')">decidability</span>, there exists a turing machine \(M_{EMPTY}\) that decides \(E_{TM}\).
+            <br><br>\(M_{EMPTY}\) is a turing machine that does the following:
+            <ul>
+                <li><strong>Receives</strong> a turing machine \(M\) as <strong>input</strong> for evaluation</li>
+                <li><strong>Accepts</strong> if \(M_{QEMPTY}\)'s langauge is <strong>empty</strong>(\(L(M_{QEMPTY}) = \emptyset \)) - \(M_{EMPTY}\) always accepts if \(M_{QEMPTY}\) always rejects.</li>
+                <li><strong>Rejects</strong> if \(M_{QEMPTY}\)'s language is <strong>not empty</strong>(\(L(M_{QEMPTY}) \neq \emptyset \)) - \(M_{EMPTY}\) always rejects if \(M_{QEMPTY}\) ever accepts.</li>
+            </ul>
+            <br>Similar to how in the previous chapter, \(A_{TM}\) presents the halting problem, \(M_{EMPTY}\) presents a different problem: presenting undecidability via <span class="highlight" onclick="openModal('emptiness')">the emptiness problem</span><br>
+            <br><strong>Reduction via Nested Turing Machine Construction -</strong>
+            <br><br>\(M_{ACCEPT}\): on input \(\langle M_{TEST}, s_{TEST} \rangle\) //where \(M_{TEST}\) is a turing machine and \(s_{TEST}\) is a string:
+            <ul>
+                <li>Construct a new machine, \(M_{INTERNAL}\), as follows:</li>
+                <ul>
+                    <li>\(M_{INTERNAL}\): On input \(\langle x_{INTERNAL} \rangle\): //where \(x_{INTERNAL}\) is the encoding of the machine \(M_{INTERNAL}\)</li>
+                    <ul>
+                        <li>Obtain \(M_{TEST}\) and \(s_{TEST}\) from outer \(M_{ACCEPT}\) //access its variables (they are treated as constants)</li>
+                        <li>If \(x_{INTERNAL} \neq S_{TEST}\), reject //if the input to \(M_{INTERNAL}\) is not the string \(s_{TEST}\), reject</li>
+                        <li>Otherwise, simulate \(M_{TEST}\) on \(s_{TEST}\) and accept, reject, or fail to halt in agreement //if the input to \(M_{INTERNAL}\) is the string \(s_{TEST}\), simulate \(M_{TEST}\) on \(s_{TEST}\)</li>
+                    </ul>
+                </ul>
+                <li>Based on what we've established, we can say the following regarding \(M_{INTERNAL}\):</li>
+                <ul>
+                    <li>The only string \(M_{INTERNAL}\) can ever accept is \(s_{TEST}\). Everything else is rejected.</li>
+                    <li>When given \(s_{TEST}\), \(M_{INTERNAL}\) does what \(M_{TEST}\) does on \(s_{TEST}\) (our "otherwise"/else condition).</li>
+                    <li>If \(M_{TEST}\) doesn't (regardless of whether it halts), then \(L(M_{INTERNAL}) = \emptyset\).</li>
+                    <li>So if and only if \(M_{TEST}\) accepts \(s_{TEST}\), \(L(M_{INTERNAL})\) is nonempty.</li>
+                </ul>
+                <br> Using this information, we can <strong>interrogate</strong> \(M_{INTERNAL}\) for emptiness:
+                <ul>
+                    <li>Run \(M_{EMPTY}\) on input \(\langle M_{INTERNAL} \rangle\)</li>
+                    <li>If \(M_{EMPTY}\) accepts (indicating \(M_{INTERNAL}'s\) language is empty), then \(M_{TEST}\) does not accept \(s_{TEST}\)</li>
+                    <li>If \(M_{EMPTY}\) rejects (indicating \(M_{INTERNAL}'s\) language is not empty), then \(M_{TEST}\) accepts \(s_{TEST}\)</li>
+                </ul>
+                <br>We're able decide whether \(M_{TEST}\) accepts \(s_{TEST}\), regardless of whether it halts. Therefore, there exists an \(M_{ACCEPT}\) that decides whether \(M_{TEST}\) accepts \(s_{TEST}\) (by which \(M_{TEST}\) accepting \(s_{TEST}\) is equivalent to \(A_{TM}\)'s acceptance from the acceptance problem).
+                <br><strong>This is a contradiction.</strong>
+                <br>Why:
+                <ul>
+                    <li>By <span class="highlight" onclick="openModal('acceptance')"> the acceptance problem</span>, \(A_{TM}\) is undecidable and \(M_{ACCEPT}\) as a decider for \(A_{TM}\) does not exist.</li>
+                    <li>However, we just showed that \(M_{ACCEPT}\) exists.</li>
+                    <li>Therefore, our initial assumption that \(E_{TM}\) is decidable must be false.</li>
+                </ul>
+                <strong>Therefore, \(E_{TM}\) is undecidable.</strong>
+            </ul>
+        </p>
+        <summary>
+            <details>
+                <summary>Inline turing machine construction Methods at a glance</summary>
+                <p>
+                    All inline-Turing-construction proofs work this way. Let's look at our cast of characters here:
+                    <ul>
+                        <li>\(E_{TM}\): The emptiness problem for Turing machines, formulated as a language. A set containing all Turing machines that accept nothing. Crucially, these Turing machines don't have to <em>halt</em> on anything – they just have to <em>not accept</em>.</li>
+                        <li>\(A_{TM}\): The acceptance problem for Turing machines – the question of whether a given machine accepts a given string, regardless of the whole inconvenient halting issue. We already know solving this is literally impossible.</li>
+                        <li>\(M_{EMPTY}\): A decider for \(E_{TM}\). We assume BWOC that \(E_{TM}\) is decidable, so we get this immediately.
+                            <ul>
+                                <li>\(M_{QEMPTY}\): The input to \(M_{EMPTY}\). The machine that \(M_{EMPTY}\) queries, or interrogates, for its language emptiness.</li>
+                            </ul>
+                        </li>
+                        <li>\(M_{ACCEPT}\): A machine that we build to solve \(A_{TM}\), thus proving that all of this is garbage. Decides whether or not \(M_{TEST}\) accepts \(s_{TEST}\), without the halting issue.
+                            <ul>
+                                <li>\(M_{TEST}\): The input machine to \(M_{ACCEPT}\).</li>
+                                <li>\(s_{TEST}\): The input string to \(M_{ACCEPT}\).</li>
+                            </ul>
+                        </li>
+                        <li>\(M_{INTERNAL}\): A machine that we build to perform the actual reduction. This machine's language becomes nonempty if and only if \(M_{TEST}\) accepts \(s_{TEST}\).
+                            <ul>
+                                <li>\(x_{INTERNAL}\): A notional input to \(M_{INTERNAL}\). Only ever gets used to compare to \(s_{TEST}\).</li>
+                                <li>This machine specifically corresponds to the "devil's advocate" machine in the original proof of acceptance's undecidability.</li>
+                                <li>Writing this machine is the logical core of an inline Turing construction proof.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </p>
+            </details>
+            
+        </summary>
+    </div>
+    
+    
+    
+    <div id="algorithm" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('algorithm')">&times;</span>
+            <h2>Church-Turing Thesis</h2>
+            <ul>
+                <li>By the church-turing thesis, an algorithm has the same expressive power as a turing machine</li>
+                <li>Therefore, we can construct an algorithm to show that \(TRIANGLE_{G}\) is decidable</li>
+            </ul>
+        </div>
+    </div>
+    <div id="contradiction" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contradiction')">&times;</span>
+            <h2>Contradiction</h2>
+            <ul>
+                <li>We are starting with the opposite of what we want to prove (in this case, that \(E_{TM}\) is decidable)</li>
+                <li>We are aiming to reach a contradiction (in this case, we start with "\(E_{TM}\) is decidable" and end with it being undecidable)</li>
+                <li>Ultimate goal: Concluding that the initial assumption (in this case, that \(E_{TM}\) is decidable) must be false</li>
+            </ul>
+        </div>
+    </div>
+    <div id="decidability" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('decidability')">&times;</span>
+            <h2>Decidability</h2>
+            <p>A language (or problem) \(L\) is decidable if and only if there exists a turing machine \(M\) such that...
+                <ul>
+                    <li>\(M\) halts on all inputs</li>
+                    <li>\(M\) accepts all inputs that are in \(L\)</li>
+                    <li>\(M\) rejects all inputs that are not in \(L\)</li>
+                </ul>
+            In this case, \(M_{EMPTY}\) halts on all inputs, accepts all inputs that are in \(E_{TM}\), and rejects all inputs that are not in \(E_{TM}\).
+            </p>
+        </div>
+    </div>
+    <div id="emptiness" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emptiness')">&times;</span>
+            <h2>The Emptiness Problem</h2>
+            <p>The emptiness problem is the problem of determining whether a given language is empty. 
+                In other words, it is the problem of deciding whether a given language contains any strings.
+                <ul>
+                    <li><strong>The emptiness problem gives us the power to decide whether a machine ever accepts any input</strong></li>
+                    <li>in other words,</li>
+                    <ul>
+                        <li>We can tell whether any given turing machine has an empty language reliably, correctly, and halting every time.</li>
+                        <li>ultimately, we will use it to decide acceptance by reduction</li>
+                    </ul>
+                    <li>How reduction works:</li>
+                    <ul>
+                        <li>We will reduce <span class="highlight" onclick="openModal('acceptance')"> the acceptance problem </span>\(A_{TM}\) to the emptiness problem \(E_{TM}\)</li>
+                        <li></li>
+                    </ul>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <div id="acceptance" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('acceptance')">&times;</span>
+            <h2>The Acceptance Problem</h2>
+            <p>The acceptance problem is the problem of determining whether a given turing machine accepts a given input.
+                <ul>
+                    <li>It asks specifically about termination in an accept state</li>
+                    <li>similar to halting problem, but halting problem asks about termination in any state whereas acceptance problem asks about termination in an accept state</li>
+                </ul>
+            The original problem: 
+            \begin{align*}
+                A_{TM} = \{\langle M, w \rangle \mid M \text{ is a turing machine that accepts } w \}
+            \end{align*}
+            Similar to how we reduced for the halting problem, we reach the same conclusion where \(A_{TM}\)'s decider does not exist and therefore \(A_{TM}\) is undecidable.
+            </p>
+        </div>
+    </div>
 </body>
 
 <script>
