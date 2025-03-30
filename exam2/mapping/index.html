@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping (Reduction Method)</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .sublist {
+            display: none;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+
+</head>
+    <body>
+    <!--Center the content-->
+    <div class="center">
+        <h3>Mapping (Reduction Method)</h3>
+    </div>
+    <p>
+        <strong>Problem 1: What is the definition of a Computable Function? Main property?</strong>
+        <br><br>Definition: A function \(f: \Sigma^{*} \rightarrow \Sigma^{*}\) is computable if some Turing machine \(M\), on every input \(s\), halts with only \(f(s)\) on its tape.
+        <br><br>Main property: Computable functions can also transform turing machines
+    </p>
+    <p>
+        <strong>Problem 2: What is mapping reducability?</strong>
+        <br><br>Definition: We can say that we can reduce \(A\) to \(B\) by mapping if there is a computable function \(f: \sigma^* \rightarrow \sigma^*\) such that for every s:
+        \begin{align*}
+           s \in A \iff f(s) \in B \text{ //s is in the language A if and only if} f(s) \text{ is in the language B}
+        \end{align*}
+        <br><br>This definition can be rewritten as \(A \leq_m B\)
+        <br><br>In a more methodical approach:
+        <ul>
+            <li>A language is reducible to another language if there is a function that reduces it</li>
+            <li>That function is usable for these purposes if it's computable</li>
+            <li>A function is computable if you can make a turing machine that computes it</li>
+        </ul>
+    </p>
+    <p>
+        <strong>Problem 3: How can we apply mapping to the halting problem?</strong>
+        
+        <p>We can apply mapping to provide an alternative proof that the halting problem is undecidable:</p>
+        
+        <ol>
+            <li><strong>Define our mapping function F</strong>:
+                <ul>
+                    <li>F takes an input ⟨M, s⟩ (a TM and a string) and transforms it into another TM-string pair</li>
+                    <li>F constructs a new TM M' that:
+                        <ul>
+                            <li>On input x: runs M on s</li>
+                            <li>If M accepts s, then M' accepts x</li>
+                            <li>If M rejects s, then M' enters an infinite loop</li>
+                        </ul>
+                    </li>
+                    <li>F outputs ⟨M', x⟩ for any arbitrary string x</li>
+                </ul>
+            </li>
+            
+            <li><strong>Establish the mapping relationship</strong>:
+                <ul>
+                    <li>⟨M, s⟩ ∈ A_TM ⟺ ⟨M', x⟩ ∈ HALT_TM</li>
+                    <li>This means: M accepts s if and only if M' halts on x</li>
+                </ul>
+            </li>
+            
+            <li><strong>Apply the mapping reduction</strong>:
+                <ul>
+                    <li>If \(HALT_{TM}\) were decidable, there would exist a decider \(M_{HALT}\) for it BWOC</li>
+                    <li>Using F and \(M_{HALT}\), we could build a decider for \(A_{TM}\):
+                        <ul>
+                            <li>On input ⟨M, s⟩, compute F(⟨M, s⟩) = ⟨M', x⟩</li>
+                            <li>Run \(M_{HALT}\) on ⟨M', x⟩</li>
+                            <li>Output whatever \(M_{HALT}\) outputs</li>
+                        </ul>
+                    </li>
+                    <li>Since \(A_{TM}\) is undecidable, this creates a contradiction</li>
+                    <li>Therefore, \(HALT_{TM}\) must also be undecidable</li>
+                </ul>
+            </li>
+        </ol>
+        This formalizes the notion that the halting problem is at least as hard as the acceptance problem. Since we know the acceptance problem is undecidable, the halting problem must be undecidable as well.
+    </p>
+    <p>
+        <strong>Problem 4: How do we define time complexity (running time) of a deterministic turing machine? Define the types of bounds.</strong>
+        \begin{align*}
+            f:\mathbb{N} \rightarrow \mathbb{N} \text{ //f is a function that takes a natural number and returns a natural number, no negative numbers allowed}
+        \end{align*}
+
+        Where...
+        <ul>
+            <li>\(f(n)\) is the maximum number of steps that \(M\) uses on any input of length \(n\)</li>
+        </ul>
+        <br>Additionally, the following three statements are equivalent:
+        <ul>
+            <li>\(f(n)\) is the running time of \(M\): the maximum number of steps/cycles \(M\) makes on any input of length \(n\)</li>
+            <li>\(M\) runs in time \(f(n)\)</li>
+            <li>\(M\) is an \(f(n)\) time Turing Machine</li>
+        </ul>
+        <br>Types of bounds:
+        <ul>
+            <li><strong>Big-O (O)</strong>: Upper bound - function grows at most as fast as</li>
+            <li><strong>Big-Omega (Ω)</strong>: Lower bound - function grows at least as fast as</li>
+            <li><strong>Big-Theta (Θ)</strong>: Tight bound - function grows exactly as fast as (both upper and lower bound)</li>
+            <li><strong>Little-o (o)</strong>: Strict upper bound - function grows strictly slower than</li>
+            <li><strong>Little-omega (ω)</strong>: Strict lower bound - function grows strictly faster than</li>
+        </ul>
+
+        <br>Common complexity classes (from fastest to slowest growth):
+        <ul>
+            <li><strong>O(1)</strong>: Constant time - execution time doesn't depend on input size</li>
+            <li><strong>O(log n)</strong>: Logarithmic time - binary search, balanced trees</li>
+            <li><strong>O(n log n)</strong>: Linearithmic time - efficient sorting algorithms (merge sort, heap sort)</li>
+            <li><strong>O(n)</strong>: Linear time - scanning through data once</li>
+            <li><strong>O(n²)</strong>: Quadratic time - simple sorting algorithms, nested loops</li>
+            <li><strong>O(n^k)</strong>: Polynomial time - k nested loops</li>
+            <li><strong>O(2^n)</strong>: Exponential time - solving NP-complete problems exactly</li>
+            <li><strong>O(n!)</strong>: Factorial time - generating all permutations</li>
+        </ul>
+    </p>
+    <p>
+        
+    </p>
+</body>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    function toggleFinalAnswer() {
+        var answer = document.getElementById("finalAnswer");
+        if (answer.style.display === "none") {
+          answer.style.display = "block";
+        } else {
+          answer.style.display = "none";
+        }
+      }
+
+    function toggleSublist(item) {
+        var sublist = item.nextElementSibling;
+        if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+          var currentDisplay = window.getComputedStyle(sublist).display;
+          sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+      }
+</script>
+</html>

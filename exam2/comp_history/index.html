@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computation History, Linear Bounded Automata, and Post Correspondence Problem</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .sublist {
+            display: none;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+
+</head>
+    <body>
+    <!--Center the content-->
+    <div class="center">
+        <h3>Computation History, Linear Bounded Automata, and Post Correspondence Problem</h3>
+    </div>
+    <p>
+        <strong>Problem 1: What is a Computation History?</strong>
+        <br><br>Definition: A computation history is a sequence of <span class="highlight" onclick="openModal('configurationsModal')">configurations</span> of a Turing Machine \(M\) on a given input \(s\):
+        \begin{align*}
+            C_1, C_2, C_3, \ldots, C_F
+        \end{align*}
+        So that:
+        <ul>
+            <li>\(C_1\) is the start configuration</li>
+            <li>\(C_i\) transitions legally to \(C_{i+1}\) for every \(i\)</li>
+            <li>\(C_F\) is a halting configuration (its state is either \(q_{accept}\) or \(q_{reject}\))</li>
+        </ul>
+    </p>
+    <p>
+        <strong>Problem 2: What is a linear bounded automaton? What are its properties?</strong>
+        <br><br>Definition: A linear bounded automaton (LBA) is a turing machine that can't move its head off the input to the right
+        <br><br>Properties:
+        <ul>
+            <li><strong>Limited space:</strong> An LBA can only use space proportional to its input length</li>
+            <li><strong>Decidable languages:</strong> Languages recognized by LBAs are decidable because they have a finite number of possible configurations</li>
+            <li><strong>Halting guarantee:</strong> Any LBA must eventually halt or repeat a configuration (by the pigeonhole principle)</li>
+            <li><strong>Regular language recognition:</strong> LBAs can decide all regular languages and context-free languages</li>
+            <li><strong>Hierarchy position:</strong> LBAs sit between pushdown automata and full Turing machines in the Chomsky hierarchy</li>
+        </ul>
+    </p>
+    <p>
+        <strong>Problem 3: What is the Post Correspondence Problem? Explain the Domino example as well as how PCP is a problem of computation histories</strong>
+        <br><br>Definition: The Post Correspondence Problem (PCP) is a decision problem that asks whether a given list of pairs of strings has a solution.
+        <br><br>The domino example:
+        <ul>
+            <li><strong>Setup:</strong> We have dominoes with strings on top and bottom (like [\(\frac{abc}{c}\)])</li>
+            <li><strong>Goal:</strong> Arrange dominoes in a line so the string across the top matches the string across the bottom</li>
+            <li><strong>Example match:</strong> {\([\frac{a}{ab}],[\frac{b}{ca}],[\frac{ca}{a}],[\frac{a}{ab}],[\frac{abc}{c}]\)} creates "abcaa" on top and "abcaa" on bottom</li>
+            <li><strong>Undecidability:</strong> The problem of determining whether a set of dominoes has a match is completely unsolvable algorithmically</li>
+        </ul>
+        So instead, we can use the Undecidability of PCP as follows: 
+        <ul>
+           <li>We define PCP as the following: </li>
+           \begin{align*}
+           PCP = \{\langle P \rangle \mid P \text{ is a PCP instance with a match}\}
+           \end{align*}
+           Where an instance of PCP is a collection of dominoes \(P = \{[\frac{t_1}{b_1}], [\frac{t_2}{b_2}], \ldots, [\frac{t_k}{b_k}]\}\) and a match is a sequence \(i_1, i_2, \ldots, i_n\) such that \(t_{i_1}t_{i_2}\ldots t_{i_n} = b_{i_1}b_{i_2}\ldots b_{i_n}\).
+        
+        <br><br>We can reduce PCP as follows:
+
+        
+        <br><br>How is it a problem of computation histories:
+        <ul>
+            <li>The PCP can be reduced to the problem of determining if a Turing machine halts on a given input</li>
+        </ul>
+        
+    </p>
+</body>
+
+<div id="configurationsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('configurationsModal')">&times;</span>
+        <h2>Definition of Configurations</h2>
+        <ul>
+            <li>A configuration of a turing machine is a snapshot of the machine's current state, the current tape content, and the current head location</li>
+            <li>A configuration is represented as a tuple: \( (q, w, h) \)</li>
+            <ul>
+                <li>\(q\): current state</li>
+                <li>\(w\): tape content</li>
+                <li>\(h\): head location</li>
+            </ul>
+        </ul>
+    </div>
+</div>
+</div>
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    function toggleFinalAnswer() {
+        var answer = document.getElementById("finalAnswer");
+        if (answer.style.display === "none") {
+          answer.style.display = "block";
+        } else {
+          answer.style.display = "none";
+        }
+      }
+
+    function toggleSublist(item) {
+        var sublist = item.nextElementSibling;
+        if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+          var currentDisplay = window.getComputedStyle(sublist).display;
+          sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+      }
+</script>
+
+</html>
