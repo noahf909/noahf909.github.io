@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Determining if a Turing Machine is Decidable (Inline Turing Machine Construction)</title>
+
+    <!-- MathJax for LaTeX-style equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for LaTeX-like font & formatting -->
+    <style>
+        body {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-size: 18px;
+            margin: 2cm;
+            background-color: #fdfdfd;
+        }
+
+        h2 {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        details {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+            background-color: #eef5ff;
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: #004080;
+        }
+
+        ul {
+            margin: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0; /* Add margin to create space between bullet points */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .highlight
+        {
+            background-color: yellow;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .small-img {
+            max-width: 200%;
+            height: auto;
+        }
+        
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .sublist {
+            display: none;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+    <!--Center the content-->
+    <div class="center">
+        <h3>NP Reductions</h3>
+    </div>
+<!--
+Tasks -
+- Simplify exam2/Mapping
+
+Prerequisites -
+Review: What is mapping and how do mapping functions work in this context?
+
+Review: What is NP?
+    NP: Nondeterministic polynomial time
+    In simple terms: you have complex problem, but, given possible solution, you can check if it's correct in polynomial time(n, n^2, etc)
+    At a glance: hard to solve, but easy to check
+
+    What are Cliques? 
+Are these within NP:
+    - sub-bags? 
+    - Satisfiability (SAT)?
+    - Conjunctive Normal Form (CNF) (3nf)?
+
+What does "In the assignment" mean?
+    - What: Solution/guess to the problem
+    - Phrased: "Does there exist an assignment (a choice of values) that satisfies the conditions of the problem"
+    Example-
+        - You have some logical problem concatenated with or gates
+        - an assignment would mean picking true or false for each variable
+        - We'd say "A problem is in NP - given an assignment - you can check quickly if it satisfies the formula"
+
+
+
+Problems - 
+Outline the Methodology for problem 1
+    - 1. Understand the problem
+        - CLIQUE: graph and a target number (G and k)
+        - 3SAT: we accept input \phi for 3SAT (3cnf boolean formula)
+        - Goal: Produce (G,k) for CLIQUE that results in reduced right answer
+    - 2. Map instances of 3SAT onto instances of clique -> create mapping function
+        - why: 
+        - how: mapping function that does the following:
+            - 
+    - 3. Demonstrate how mapper created by function will run where:
+        - an instance of (input to 3SAT) produces a corresponding instance of CLIQUE and runs it in polynomial time
+
+
+
+
+-->
+    <p>
+        <strong>Problem 1: Given the following</strong>
+        \[
+            3SAT = \{\phi \mid \phi \text{ is satisfiable 3cnf Boolean Formula}\} 
+        \]
+        \[
+            CLIQUE = \{(G,k)\mid G \text{ is a graphh that contains a k - clique}\}
+        \]
+        <strong>Show:  </strong>\( 3SAT \leq_{p} CLIQUE \)
+    </p>
+
+    <p>
+        <strong>Problem 2: </strong>
+    </p>
+    <p>
+        <strong>Problem 3: </strong>
+    </p>
+</body>
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    function toggleFinalAnswer() {
+        var answer = document.getElementById("finalAnswer");
+        if (answer.style.display === "none") {
+          answer.style.display = "block";
+        } else {
+          answer.style.display = "none";
+        }
+      }
+
+    function toggleSublist(item) {
+        var sublist = item.nextElementSibling;
+        if (sublist && sublist.tagName.toLowerCase() === 'ul') {
+          var currentDisplay = window.getComputedStyle(sublist).display;
+          sublist.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        }
+      }
+</script>
+</html>
