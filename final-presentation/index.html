@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Senior Design Presentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/white.css" id="theme" />
+  </head>
+  <style>
+    .reveal .slides {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+  
+    .reveal {
+      background-color: white;
+    }
+  
+    section img {
+      display: block;
+    }
+  </style>
+  
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background-image="slides/1.png"> 
+        </section>
+        <section data-background-image="slides/2.png"> 
+        </section>
+        <section data-background-image="slides/3.png"> 
+        </section>
+        <section data-background-image="slides/4.png"> 
+        </section>
+        <section data-background-image="slides/5.png"> 
+        </section>
+        <section>
+            <div class="mermaid">
+                <pre>
+                graph TD
+                %% HTML Files
+                index[index.html]
+                login[login.html]
+                forgot[forgot-password.html]
+                dashboard[dashboard.html]
+                run_pred[run-predictions.html]
+                past_pred[past-predictions.html]
+                system[system.html]
+                settings[settings.html]
+                about[about.html]
+                
+                %% JavaScript Files
+                login_js[js/login.js]
+                send_pass[js/sendPassword.js]
+                dash_js[js/dashboard.js]
+                run_js[js/run-predictions.js]
+                past_js[js/past-predictions.js]
+                sys_js[js/system.js]
+                settings_js[js/settings.js]
+                about_js[js/about.js]
+                global_js[js/global.js]
+                
+                %% PHP Files
+                login_php[php/login.php]
+                reset_php[php/resetPassword.php]
+                dash_php[php/dashboard.php]
+                run_php[php/run-predictions.php]
+                past_php[php/past-predictions.php]
+                sys_php[php/system.php]
+                save_settings[php/save-settings.php]
+                db_conn[php/db_connection.php]
+                
+                %% Python Scripts
+                model_py["opt/scripts/model.py"]
+                preprocess_py["opt/scripts/preprocess.py"]
+                run_readmission_py["opt/scripts/run_readmission.py"]
+                metrics_py["opt/scripts/metrics.py"]
+                file_utils_py["opt/scripts/file_utils.py"]
+                modeling_readmission_py["opt/scripts/modeling_readmission.py"]
+                
+                %% Python Models and Data
+                model_pkl["opt/model/model.pkl"]
+                model_columns_pkl["opt/model/model_columns.pkl"]
+                metrics_pkl["opt/model/metrics.pkl"]
+                bert_model["Pre-trained BERT Model"]
+                
+                %% Database
+                database[(NemoursDatabase)]
+                
+                %% Database Tables
+                user_table[User Table]
+                patient_table[Patient Table]
+                prediction_table[Prediction Table]
+                model_table[Model Table]
+                noteevents_table[NoteEvents Table]
+                preprocessed_notes_table[preprocessedNotes Table]
+                
+                %% External Services
+                email_service[Email Service]
+                
+                %% HTML to JS connections
+                login --> login_js
+                forgot --> send_pass
+                dashboard --> dash_js
+                run_pred --> run_js
+                past_pred --> past_js
+                system --> sys_js
+                settings --> settings_js
+                settings --> global_js
+                about --> about_js
+                
+                %% JS to PHP connections
+                login_js -- "POST credentials" --> login_php
+                send_pass -- "POST email" --> reset_php
+                dash_js -- "GET dashboard data" --> dash_php
+                run_js -- "POST prediction request" --> run_php
+                past_js -- "GET predictions history" --> past_php
+                sys_js -- "GET system metrics" --> sys_php
+                settings_js -- "POST user settings" --> save_settings
+                
+                %% PHP to DB connections
+                login_php -- "Include" --> db_conn
+                reset_php -- "Include" --> db_conn
+                dash_php -- "Include" --> db_conn
+                run_php -- "Include" --> db_conn
+                past_php -- "Include" --> db_conn
+                sys_php -- "Include" --> db_conn
+                save_settings -- "Include" --> db_conn
+                
+                %% PHP to Python connections
+                run_php -- "exec() with JSON" --> model_py
+                run_php -- "exec() with JSON" --> preprocess_py
+                run_php -- "exec() with JSON" --> run_readmission_py
+                sys_php -- "exec()" --> metrics_py
+                
+                %% Python script dependencies
+                model_py -- "import" --> file_utils_py
+                run_readmission_py -- "import" --> modeling_readmission_py
+                run_readmission_py -- "import" --> file_utils_py
+                
+                %% Python to model files
+                model_py -- "load" --> model_pkl
+                model_py -- "load" --> model_columns_pkl
+                metrics_py -- "load" --> metrics_pkl
+                run_readmission_py -- "load" --> bert_model
+                
+                %% DB connection to database
+                db_conn --> database
+                
+                %% Database tables
+                database --> user_table
+                database --> patient_table
+                database --> prediction_table
+                database --> model_table
+                database --> noteevents_table
+                database --> preprocessed_notes_table
+                
+                %% External service connections
+                reset_php -- "Send reset email" --> email_service
+                
+                %% Database operations
+                login_php -- "Query/Verify" --> user_table
+                reset_php -- "Query/Update" --> user_table
+                dash_php -- "Query" --> user_table
+                dash_php -- "Query" --> prediction_table
+                dash_php -- "Query" --> patient_table
+                dash_php -- "Query" --> model_table
+                run_php -- "Query" --> patient_table
+                run_php -- "Query" --> noteevents_table
+                run_php -- "Query/Insert/Delete" --> preprocessed_notes_table
+                run_php -- "Insert" --> prediction_table
+                past_php -- "Query" --> prediction_table
+                past_php -- "Query" --> patient_table
+                past_php -- "Query" --> user_table
+                sys_php -- "Query" --> model_table
+                save_settings -- "Update" --> user_table
+                
+                %% Python to Database (via PHP)
+                model_py -- "Return JSON results" --> run_php
+                preprocess_py -- "Return JSON results" --> run_php
+                run_readmission_py -- "Return JSON results" --> run_php
+                metrics_py -- "Return JSON results" --> sys_php
+                
+                %% Data flow for preprocessed notes
+                preprocess_py -- "Processed text" --> run_php
+                run_php -- "Store processed text" --> preprocessed_notes_table
+                preprocessed_notes_table -- "Retrieve for BERT" --> run_php
+                run_php -- "Send to BERT" --> run_readmission_py
+                
+                %% Session flow
+                login_php -- "Set session" --> dashboard
+                
+                %% Navigation flow between pages
+                dashboard -- "Navigate" --> run_pred
+                dashboard -- "Navigate" --> past_pred
+                dashboard -- "Navigate" --> system
+                dashboard -- "Navigate" --> about
+                dashboard -- "Navigate" --> settings
+                
+                %% Logout flow
+                dashboard -- "Logout" --> index
+                
+                %% Style definitions
+                classDef html fill:#f96,stroke:#333,stroke-width:2px
+                classDef js fill:#9cf,stroke:#333,stroke-width:2px
+                classDef php fill:#c9f,stroke:#333,stroke-width:2px
+                classDef python fill:#6c6,stroke:#333,stroke-width:2px
+                classDef model fill:#fc6,stroke:#333,stroke-width:2px
+                classDef db fill:#fc9,stroke:#333,stroke-width:2px
+                classDef table fill:#cfc,stroke:#333,stroke-width:2px
+                classDef service fill:#f9c,stroke:#333,stroke-width:2px
+                
+                %% Apply styles
+                class index,login,forgot,dashboard,run_pred,past_pred,system,settings,about html
+                class login_js,send_pass,dash_js,run_js,past_js,sys_js,settings_js,about_js,global_js js
+                class login_php,reset_php,dash_php,run_php,past_php,sys_php,save_settings,db_conn php
+                class model_py,preprocess_py,run_readmission_py,metrics_py,file_utils_py,modeling_readmission_py python
+                class model_pkl,model_columns_pkl,metrics_pkl,bert_model model
+                class database db
+                class user_table,patient_table,prediction_table,model_table,noteevents_table,preprocessed_notes_table table
+                class email_service service
+                </pre>
+            </div>
+        </section>
+        <section data-background-image="slides/7.png"> 
+        </section>
+        <section data-background-image="slides/8.png"> 
+        </section>
+        <section data-background-image="slides/9.png"> 
+        </section>
+        <section data-background-image="slides/10.png"> 
+        </section>
+        <section data-background-image="slides/11.png"> 
+        </section>
+        <section data-background-image="slides/12.png"> 
+        </section>
+        <section data-background-image="slides/13.png"> 
+        </section>
+        <section data-background-image="slides/14.png"> 
+        </section>
+        <section data-background-image="slides/15.png"> 
+        </section>
+        <section data-background-image="slides/16.png"> 
+        </section>
+        <section data-background-image="slides/17.png"> 
+        </section>
+        <section data-background-image="slides/18.png"> 
+        </section>
+        <section data-background-image="slides/19.png"> 
+        </section>
+        <section data-background-image="slides/20.png"> 
+        </section>
+        <section>
+          <div class="mermaid">
+              <pre>
+              flowchart TD
+                  login_php["php/login.php"] -- Include --> db_conn["php/db_connection.php"]
+                  reset_php["php/resetPassword.php"] -- Include --> db_conn
+                  dash_php["php/dashboard.php"] -- Include --> db_conn
+                  run_php["php/run-predictions.php"] -- Include --> db_conn
+                  past_php["php/past-predictions.php"] -- Include --> db_conn
+                  sys_php["php/system.php"] -- Include --> db_conn
+                  save_settings["php/save-settings.php"] -- Include --> db_conn
+                  run_php -- exec() with JSON --> model_py["opt/scripts/model.py"] & preprocess_py["opt/scripts/preprocess.py"] & run_readmission_py["opt/scripts/run_readmission.py"]
+                  sys_php -- exec() --> metrics_py["opt/scripts/metrics.py"]
+                  model_py -- import --> file_utils_py["opt/scripts/file_utils.py"]
+                  run_readmission_py -- import --> modeling_readmission_py["opt/scripts/modeling_readmission.py"] & file_utils_py
+                  model_py -- load --> model_pkl["opt/model/model.pkl"] & model_columns_pkl["opt/model/model_columns.pkl"]
+                  metrics_py -- load --> metrics_pkl["opt/model/metrics.pkl"] & model_columns_pkl
+                  run_readmission_py -- load --> bert_model["Pre-trained BERT Model"]
+                  db_conn --> database[("NemoursDatabase")]
+                  database --> user_table["User Table"] & patient_table["Patient Table"] & prediction_table["Prediction Table"] & model_table["Model Table"] & noteevents_table["NoteEvents Table"] & preprocessed_notes_table["preprocessedNotes Table"]
+                  reset_php -- Send reset email --> email_service["Email Service"]
+                  login_php -- Query/Verify --> user_table
+                  reset_php -- Query/Update --> user_table
+                  dash_php -- Query --> user_table & prediction_table & patient_table & model_table
+                  run_php -- Query --> patient_table & noteevents_table
+                  run_php -- Query/Insert/Delete --> preprocessed_notes_table
+                  run_php -- Insert --> prediction_table
+                  past_php -- Query --> prediction_table & patient_table & user_table
+                  sys_php -- Query --> model_table
+                  sys_php -- Update --> model_table
+                  save_settings -- Update --> user_table
+                  model_py -- Return JSON results --> run_php
+                  preprocess_py -- Return JSON results --> run_php
+                  run_readmission_py -- Return JSON results --> run_php
+                  metrics_py -- Return model metrics --> sys_php
+                  preprocess_py -- Processed text --> run_php
+                  run_php -- Store processed text --> preprocessed_notes_table
+                  preprocessed_notes_table -- Retrieve for BERT --> run_php
+                  run_php -- Send to BERT --> run_readmission_py
+                  metrics_py -- Extract metrics --> sys_php
+                  sys_php -- Store metrics --> model_table
+                  login_php:::php
+                  reset_php:::php
+                  dash_php:::php
+                  run_php:::php
+                  past_php:::php
+                  sys_php:::php
+                  save_settings:::php
+                  db_conn:::php
+                  model_py:::python
+                  preprocess_py:::python
+                  run_readmission_py:::python
+                  metrics_py:::python
+                  file_utils_py:::python
+                  modeling_readmission_py:::python
+                  model_pkl:::model
+                  model_columns_pkl:::model
+                  metrics_pkl:::model
+                  bert_model:::model
+                  database:::db
+                  user_table:::table
+                  patient_table:::table
+                  prediction_table:::table
+                  model_table:::table
+                  noteevents_table:::table
+                  preprocessed_notes_table:::table
+                  email_service:::service
+                  classDef php fill:#c9f,stroke:#333,stroke-width:2px
+                  classDef python fill:#6c6,stroke:#333,stroke-width:2px
+                  classDef model fill:#fc6,stroke:#333,stroke-width:2px
+                  classDef db fill:#fc9,stroke:#333,stroke-width:2px
+                  classDef table fill:#cfc,stroke:#333,stroke-width:2px
+                  classDef service fill:#f9c,stroke:#333,stroke-width:2px
+              </pre>
+          </div>
+        </section>
+        <section data-background-image="slides/22.png"> 
+        </section>
+        <section data-background-image="slides/23.png"> 
+        </section>
+        <section>
+          <iframe width="100%" height="600" src='https://dbdiagram.io/e/67186aa297a66db9a3ef8545/67f33e4b4f7afba1848edcba' frameborder="0" allowfullscreen></iframe>
+        </section>
+        <section data-background-image="slides/25.png"> 
+        </section>
+        <section>
+            <img src="slides/timeline.png" style="max-width:ff 100%; max-height: 80vh; object-fit: contain;">
+        </section>
+        <section data-background-image="slides/27.png"> 
+        </section>
+        <section data-background-image="slides/backlog.png"> 
+        </section>
+        <section data-background-image="slides/29.png"> 
+        </section>
+        <section data-background-image="slides/30.png"> 
+        </section>
+      </div>
+    </div>
+</body>
+<script src="https://unpkg.com/reveal.js@5.0.5/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script>
+<script>
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    center: true,
+    hash: true,
+
+    // mermaid initialize config
+    mermaid: {
+      theme: 'default'
+    },
+
+    plugins: [RevealMermaid, RevealZoom],
+  });
+</script>
+</html>
